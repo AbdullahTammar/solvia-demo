@@ -76,7 +76,8 @@ function go(hash) { if (location.hash === '#' + hash || (hash === '' && !locatio
 function route() {
   R = parse();
   if (R.view === 'app' && session !== R.role) {
-    if (!session) { R = { view: 'public' }; history.replaceState(null, '', location.pathname + location.search); }
+    if (MENUS[R.role]) { session = R.role; store.set('session', session); }   // demo: direct links sign in
+    else if (!session) { R = { view: 'public' }; history.replaceState(null, '', location.pathname + location.search); }
     else R.role = session;
   }
   closeAll(); render();
@@ -139,6 +140,7 @@ function pubNav() {
       ${inFrame ? '' : `<button class="iconbtn hide-m" title="${A('معاينة الجوال', 'Mobile preview')}" onclick="App.phone()">${ic('smartphone')}</button>`}
       <button class="pill" onclick="App.lang()">${en() ? 'العربية' : 'EN'}</button>
       <button class="iconbtn" onclick="App.theme()">${ic(document.documentElement.dataset.theme === 'dark' ? 'sun' : 'moon')}</button>
+      <button class="pill hide-m" onclick="App.staffLogin()">${A('دخول الموظفين', 'Staff sign in')}</button>
       <button class="btn sm" onclick="App.login()">${ic('log-in')}<span class="hide-m">${session ? A('حسابي', 'My account') : A('دخول', 'Sign in')}</span></button>
     </div></nav>`;
 }
