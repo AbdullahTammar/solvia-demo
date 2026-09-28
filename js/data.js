@@ -1,71 +1,142 @@
-// Demo data and the default Dev price catalog. Text pairs are [Arabic, English].
+// Demo data. Text pairs are [Arabic, English].
 window.D = {
+  // SHA-256 of the pricing password
   devHash: '6d416bd44b627339627dddafc23eea477f1cb4789f3481a443280d08c42d5807',
   developer: { whatsapp: '', email: '' },
 
+  // [id, ar, en, domain (for the logo), brand colour, url]
   platforms: [
-    ['qiwa', 'قوى', 'Qiwa', 'briefcase-business'],
-    ['mudad', 'مدد', 'Mudad', 'wallet'],
-    ['gosi', 'التأمينات الاجتماعية', 'GOSI', 'shield-check'],
-    ['hrsd', 'الموارد البشرية', 'HRSD', 'users'],
-    ['musaned', 'مساند', 'Musaned', 'house'],
-    ['sdb', 'بنك التنمية', 'SDB', 'landmark'],
-    ['najiz', 'ناجز', 'Najiz', 'scale'],
-    ['absher', 'أبشر أعمال', 'Absher Business', 'id-card'],
+    ['qiwa', 'قوى', 'Qiwa', 'qiwa.sa', '#0f7a6c', 'https://qiwa.sa'],
+    ['mudad', 'مدد', 'Mudad', 'mudad.com.sa', '#1d6f5a', 'https://mudad.com.sa'],
+    ['gosi', 'التأمينات الاجتماعية', 'GOSI', 'gosi.gov.sa', '#1a7f4b', 'https://www.gosi.gov.sa'],
+    ['hrsd', 'وزارة الموارد البشرية', 'HRSD', 'hrsd.gov.sa', '#2b6e3f', 'https://www.hrsd.gov.sa'],
+    ['musaned', 'مساند', 'Musaned', 'musaned.com.sa', '#7a5a1f', 'https://musaned.com.sa'],
+    ['sdb', 'بنك التنمية الاجتماعية', 'Social Development Bank', 'sdb.gov.sa', '#0e6b57', 'https://www.sdb.gov.sa'],
+    ['najiz', 'ناجز', 'Najiz', 'najiz.sa', '#b08a3e', 'https://najiz.sa'],
   ],
 
-  // [id, platform, ar, en, desc ar, desc en, price (0 = on request), category, sla hours]
+  // [id, platform ('' = AR SOLVIA service), ar, en, desc ar, desc en, price SAR, audience, business days, icon]
   services: [
-    ['s1', 'qiwa', 'خدمات قوى', 'Qiwa services', 'إدارة خدمات المنشآت والموظفين', 'Establishment & employee services', 149, 'biz', 24],
-    ['s2', 'mudad', 'خدمات مدد', 'Mudad services', 'حماية الأجور والعمليات المرتبطة', 'Wage protection & payroll', 99, 'biz', 24],
-    ['s3', 'gosi', 'التأمينات الاجتماعية', 'GOSI', 'اشتراكات وتحديث ومتابعة', 'Subscriptions, updates & follow-up', 129, 'biz', 24],
-    ['s4', 'najiz', 'خدمات ناجز', 'Najiz services', 'الخدمات العدلية والإجراءات', 'Judicial services & procedures', 199, 'ind', 48],
-    ['s5', 'musaned', 'خدمات مساند', 'Musaned services', 'إجراءات العمالة المنزلية', 'Domestic labour procedures', 149, 'ind', 48],
-    ['s6', 'hrsd', 'استشارات عمالية', 'Labour consultation', 'موعد مع مختص ومتابعة', 'Session with a specialist + follow-up', 249, 'ind', 72],
-    ['s7', 'hrsd', 'إدارة HR عن بعد', 'Remote HR management', 'إدارة موارد بشرية للمنشآت', 'Managed HR for companies', 499, 'biz', 72],
-    ['s8', 'sdb', 'بنك التنمية', 'Development Bank', 'المساعدة في خدمات التمويل', 'Help with financing services', 0, 'ind', 96],
+    ['s1', 'qiwa', 'قوى — إدارة عقود العمل', 'Qiwa — Employment contracts', 'مراجعة المستندات، تجهيز الطلب، ومتابعة مختص من AR SOLVIA.', 'Document review, request preparation and follow-up by an AR SOLVIA specialist.', 350, 'all', 3, 'file-signature'],
+    ['s2', 'mudad', 'مُدد — حماية الأجور', 'Mudad — Wage protection', 'مراجعة المستندات، تجهيز الطلب، ومتابعة مختص من AR SOLVIA.', 'Document review, request preparation and follow-up by an AR SOLVIA specialist.', 450, 'all', 2, 'wallet'],
+    ['s3', 'gosi', 'التأمينات الاجتماعية', 'Social Insurance (GOSI)', 'مراجعة المستندات، تجهيز الطلب، ومتابعة مختص من AR SOLVIA.', 'Document review, request preparation and follow-up by an AR SOLVIA specialist.', 250, 'all', 2, 'shield-check'],
+    ['s4', 'hrsd', 'خدمات الموارد البشرية', 'HR services (HRSD)', 'مراجعة المستندات، تجهيز الطلب، ومتابعة مختص من AR SOLVIA.', 'Document review, request preparation and follow-up by an AR SOLVIA specialist.', 300, 'all', 4, 'users'],
+    ['s5', 'musaned', 'مساند — خدمات الاستقدام', 'Musaned — Recruitment', 'مراجعة المستندات، تجهيز الطلب، ومتابعة مختص من AR SOLVIA.', 'Document review, request preparation and follow-up by an AR SOLVIA specialist.', 500, 'all', 5, 'house'],
+    ['s6', 'sdb', 'بنك التنمية الاجتماعية', 'Social Development Bank', 'مراجعة المستندات، تجهيز الطلب، ومتابعة مختص من AR SOLVIA.', 'Document review, request preparation and follow-up by an AR SOLVIA specialist.', 400, 'all', 5, 'landmark'],
+    ['s7', 'najiz', 'ناجز — الخدمات العدلية', 'Najiz — Judicial services', 'مراجعة المستندات، تجهيز الطلب، ومتابعة مختص من AR SOLVIA.', 'Document review, request preparation and follow-up by an AR SOLVIA specialist.', 300, 'all', 3, 'scale'],
+    ['s8', '', 'إدارة الموارد البشرية عن بُعد', 'Remote HR management', 'مراجعة المستندات، تجهيز الطلب، ومتابعة مختص من AR SOLVIA.', 'Document review, request preparation and follow-up by an AR SOLVIA specialist.', 1500, 'all', 5, 'briefcase-business'],
+    ['s9', '', 'استشارة عمالية', 'Labour consultation', 'مراجعة المستندات، تجهيز الطلب، ومتابعة مختص من AR SOLVIA.', 'Document review, request preparation and follow-up by an AR SOLVIA specialist.', 200, 'all', 1, 'messages-square'],
+    ['s10', '', 'تسجيل المنشآت في المنصات', 'Registering companies on platforms', 'مراجعة المستندات، تجهيز الطلب، ومتابعة مختص من AR SOLVIA.', 'Document review, request preparation and follow-up by an AR SOLVIA specialist.', 350, 'all', 3, 'building-2'],
+    ['s11', '', 'طلبات الخدمات الحكومية', 'Government service requests', 'مراجعة المستندات، تجهيز الطلب، ومتابعة مختص من AR SOLVIA.', 'Document review, request preparation and follow-up by an AR SOLVIA specialist.', 300, 'all', 3, 'landmark'],
+    ['s12', '', 'إعداد النماذج والمستندات', 'Preparing forms & documents', 'مراجعة المستندات، تجهيز الطلب، ومتابعة مختص من AR SOLVIA.', 'Document review, request preparation and follow-up by an AR SOLVIA specialist.', 150, 'all', 1, 'file-text'],
+  ],
+  followUpFee: 50,
+
+  staff: [
+    ['AO', 'أحمد العتيبي', 'Ahmed Alotaibi', 'employee'],
+    ['NS', 'نورة السبيعي', 'Noura Alsubaie', 'employee'],
+    ['KH', 'خالد الحربي', 'Khalid Alharbi', 'employee'],
+    ['SM', 'سارة المطيري', 'Sara Almutairi', 'supervisor'],
   ],
 
+  customers: [
+    ['C1', 'عبدالله تمّار', 'Abdullah Tammar', 'ind', '+966 55 012 3456'],
+    ['C2', 'مسار التجارية', 'Masar Trading', 'biz', '+966 11 410 2200'],
+    ['C3', 'ريم القحطاني', 'Reem Alqahtani', 'ind', '+966 50 778 9911'],
+    ['C4', 'ركن الأعمال', 'Rukn Business', 'biz', '+966 12 655 3100'],
+    ['C5', 'فهد الشهري', 'Fahad Alshehri', 'ind', '+966 54 332 1180'],
+  ],
+
+  // type: t = ticket only, f = ticket + follow-up
   tickets: [
-    { id: 'REQ-10429', svc: 's1', cust: ['عبدالله تمّار', 'Abdullah Tammar'], st: 'progress', p: 'high', emp: 'AO', age: 4, sla: 6, ch: 'whatsapp' },
-    { id: 'REQ-10428', svc: 's3', cust: ['مسار التجارية', 'Masar Trading'], st: 'new', p: 'urgent', emp: '', age: 1, sla: 4, ch: 'web' },
-    { id: 'REQ-10426', svc: 's4', cust: ['ريم القحطاني', 'Reem Alqahtani'], st: 'new', p: 'normal', emp: 'AO', age: 2, sla: 9, ch: 'web' },
-    { id: 'REQ-10425', svc: 's5', cust: ['فهد الشهري', 'Fahad Alshehri'], st: 'progress', p: 'normal', emp: 'NS', age: 7, sla: 12, ch: 'sms' },
-    { id: 'REQ-10422', svc: 's2', cust: ['ركن الأعمال', 'Rukn Business'], st: 'waiting', p: 'normal', emp: 'NS', age: 10, sla: 14, ch: 'web' },
-    { id: 'REQ-10420', svc: 's7', cust: ['ركن الأعمال', 'Rukn Business'], st: 'progress', p: 'high', emp: 'KH', age: 20, sla: 18, ch: 'whatsapp' },
-    { id: 'REQ-10418', svc: 's3', cust: ['مسار التجارية', 'Masar Trading'], st: 'done', p: 'normal', emp: 'KH', age: 5, sla: 24, ch: 'web' },
-    { id: 'REQ-10412', svc: 's6', cust: ['عبدالله تمّار', 'Abdullah Tammar'], st: 'done', p: 'low', emp: 'AO', age: 3, sla: 72, ch: 'web' },
+    { id: 'REQ-10429', svc: 's1', cust: 'C1', st: 'progress', p: 'high', emp: 'AO', age: 30, type: 'f', ch: 'whatsapp', paid: 400 },
+    { id: 'REQ-10428', svc: 's3', cust: 'C2', st: 'new', p: 'urgent', emp: '', age: 2, type: 'f', ch: 'web', paid: 300 },
+    { id: 'REQ-10426', svc: 's7', cust: 'C3', st: 'new', p: 'normal', emp: '', age: 5, type: 't', ch: 'web', paid: 300 },
+    { id: 'REQ-10425', svc: 's5', cust: 'C5', st: 'progress', p: 'normal', emp: 'NS', age: 60, type: 'f', ch: 'sms', paid: 550 },
+    { id: 'REQ-10422', svc: 's2', cust: 'C4', st: 'waiting', p: 'normal', emp: 'NS', age: 20, type: 't', ch: 'web', paid: 450 },
+    { id: 'REQ-10420', svc: 's8', cust: 'C4', st: 'progress', p: 'high', emp: 'KH', age: 130, type: 'f', ch: 'whatsapp', paid: 1550 },
+    { id: 'REQ-10419', svc: 's10', cust: 'C2', st: 'progress', p: 'normal', emp: 'AO', age: 26, type: 't', ch: 'web', paid: 350 },
+    { id: 'REQ-10418', svc: 's3', cust: 'C2', st: 'done', p: 'normal', emp: 'KH', age: 20, type: 't', ch: 'web', paid: 250 },
+    { id: 'REQ-10412', svc: 's9', cust: 'C1', st: 'done', p: 'low', emp: 'AO', age: 6, type: 't', ch: 'web', paid: 200 },
   ],
-  staff: { AO: ['أحمد العتيبي', 'Ahmed Alotaibi'], NS: ['نورة السبيعي', 'Noura Alsubaie'], KH: ['خالد الحربي', 'Khalid Alharbi'] },
 
-  // Dev price catalog (SAR): [id, ar, en, desc, price, once|month, optional]
-  catalog: [
-    ['منصة Solvia', 'Solvia platform', [
-      ['core', 'البوابة الأساسية والحسابات والأدوار', 'Core portal, accounts & roles', 'Customer / employee / manager roles, secure login, audit log, Arabic + English', 15000, 'once', 0],
-      ['catalog', 'دليل الخدمات وطلب الخدمة', 'Service catalog & request flow', 'Services per platform, request form, document upload, status journey', 14000, 'once', 0],
-      ['tickets', 'نظام التذاكر مع SLA', 'Ticketing with SLA', 'Kanban board, assignment, SLA timers, escalation, customer notes', 22000, 'once', 0],
-      ['payments', 'الدفع الإلكتروني', 'Online payments', 'Mada, Visa, Mastercard, Apple Pay, STC Pay via Moyasar / HyperPay', 9000, 'once', 0],
-      ['invoices', 'الفواتير الإلكترونية (زاتكا)', 'E-invoicing (ZATCA phase 2)', 'VAT invoices with QR, linked to Fatoora', 8000, 'once', 0],
-      ['appts', 'المواعيد والاستشارات', 'Appointments & consultations', 'Booking calendar, reminders, virtual meeting links', 7000, 'once', 1],
-      ['manager', 'لوحة المدير والمالية والتقارير', 'Manager dashboard, finance & reports', 'Revenue, SLA, staff performance, Excel / PDF exports', 12000, 'once', 0],
-      ['pricing', 'إدارة الأسعار والباقات', 'Pricing & subscription plans', 'Edit service prices, company plans, discounts', 6000, 'once', 0],
-      ['mobile', 'تطبيق ويب للجوال (PWA)', 'Mobile web app (PWA)', 'Installable on iPhone / Android with push notifications', 9000, 'once', 1],
-    ]],
-    ['الربط والتكامل', 'Integrations', [
-      ['sms', 'ربط الرسائل النصية SMS', 'SMS gateway integration', 'Unifonic / Taqnyat / Msegat: OTP and status updates', 3500, 'once', 0],
-      ['smsc', 'رصيد الرسائل النصية', 'SMS credits (~10,000 / month)', 'Provider cost, about 0.08 SAR per SMS', 800, 'month', 0],
-      ['wa', 'واتساب للأعمال API', 'WhatsApp Business API', 'Official Meta API: ticket updates, chat, message templates', 7500, 'once', 0],
-      ['wac', 'رسوم محادثات واتساب', 'WhatsApp conversation fees', 'Meta fees (estimate)', 600, 'month', 0],
-      ['nafath', 'التحقق عبر نفاذ', 'Nafath identity login', 'National ID verification for customers', 9000, 'once', 1],
-      ['email', 'البريد الإلكتروني', 'Transactional email', 'Receipts, notifications, password reset', 1500, 'once', 0],
-    ]],
-    ['الاستضافة والدعم', 'Hosting & support', [
-      ['ksa', 'تجهيز الاستضافة داخل السعودية', 'Saudi hosting setup', 'Riyadh / Jeddah region, NCA & PDPL data residency', 4000, 'once', 0],
-      ['ksam', 'خادم سحابي في السعودية ونسخ احتياطي', 'Saudi cloud server & backups', 'Managed server, SSL, daily backups, monitoring', 1400, 'month', 0],
-      ['domain', 'النطاق والشهادة', 'Domain & SSL (.sa / .com)', 'Yearly, billed monthly', 100, 'month', 0],
-      ['sup', 'الدعم والصيانة', 'Support & maintenance', 'Fixes, updates, 8×5 support, 4h critical response', 2500, 'month', 1],
-      ['train', 'التدريب والإطلاق', 'Training & go-live', 'Staff training, Arabic user guides, launch support', 3000, 'once', 0],
-    ]],
+  forms: [
+    ['نموذج تفويض', 'Authorisation form', 'PDF'],
+    ['قائمة مستندات نقل الخدمات', 'Transfer documents checklist', 'PDF'],
+    ['نموذج بيانات الموظفين', 'Employee data template', 'XLSX'],
+    ['نموذج طلب استشارة', 'Consultation request form', 'PDF'],
   ],
-  terms: { vat: 15, discount: 0, splitNote: '40% عند التوقيع · 40% عند الاختبار · 20% عند الإطلاق', weeks: 10, validity: 30 },
+
+  /* ---------------- Pricing page (hidden, password) ----------------
+     All prices in SAR, excluding VAT. Change them here.            */
+  pricing: {
+    build: [
+      // [ar, en, desc ar, desc en, price]
+      ['تصميم الواجهات والواجهة الأمامية', 'UI/UX design & front-end', 'الموقع العام، تطبيق العميل للجوال والكمبيوتر، بوابة الموظفين والمشرف، عربي/إنجليزي، داكن/فاتح', 'Public site, customer app (mobile + desktop), staff & supervisor portal, AR/EN, dark/light', 18000],
+      ['الواجهة الخلفية وواجهات API', 'Back-end & APIs', 'الدخول برمز OTP، الخدمات، التذاكر، الإسناد، الصلاحيات، الفواتير، التقارير', 'OTP login, services, tickets, assignment, roles, invoices, reports', 24000],
+      ['قاعدة البيانات', 'Database', 'تصميم قاعدة البيانات، الفهارس، النسخ الاحتياطي، نقل البيانات الحالية', 'Schema, indexes, backups, import of existing data', 6000],
+      ['المحادثة والتحديثات الفورية (WebSocket)', 'Real-time chat & live updates (WebSocket)', 'محادثة بين العميل والموظف وتحديث التذاكر لحظيًا', 'Customer ↔ staff chat and live ticket updates', 5000],
+      ['الربط مع الخدمات الخارجية', 'Integrations', 'الرسائل، واتساب، بوابة الدفع، الفوترة الإلكترونية، الاجتماعات الافتراضية', 'SMS, WhatsApp, payment gateway, e-invoicing, video meetings', 9000],
+      ['الأمان والحماية', 'Security', 'تشفير، حماية OWASP، سجل تدقيق، صلاحيات دقيقة، متطلبات نظام حماية البيانات الشخصية', 'Encryption, OWASP hardening, audit log, fine-grained roles, PDPL basics', 6000],
+      ['تجهيز الخادم والإطلاق', 'Server setup & deployment', 'إعداد الخادم في السعودية، SSL، المراقبة، النشر الآلي', 'Saudi server setup, SSL, monitoring, CI/CD', 3000],
+      ['الاختبار والتدريب والإطلاق', 'Testing, training & launch', 'اختبار شامل، تدريب الموظفين، أدلة الاستخدام', 'Full testing, staff training, user guides', 3000],
+    ],
+    buildOptional: [
+      ['تطبيقات الجوال (iOS و Android)', 'Native mobile apps (iOS & Android)', 'نشر التطبيق في App Store و Google Play', 'Published on the App Store and Google Play', 25000],
+      ['الدخول عبر نفاذ', 'Nafath login', 'التحقق من الهوية الوطنية', 'National ID verification', 6000],
+    ],
+    // monthly care plans (my work)
+    care: [
+      ['أساسي', 'Basic', 'إصلاح الأعطال والتحديثات الأمنية', 'Bug fixes and security updates', 1500],
+      ['قياسي', 'Standard', 'الأساسي + دعم ٨×٥ واستجابة خلال ٤ ساعات + تعديلات بسيطة', 'Basic + 8×5 support, 4h response, small changes', 2500],
+      ['متقدم', 'Premium', 'القياسي + تطوير مستمر ١٠ ساعات شهريًا + مراقبة ٢٤/٧', 'Standard + 10 dev hours/month + 24/7 monitoring', 4000],
+    ],
+    // outside services: client pays the provider. [ar, en, note ar, note en, once, month, year]
+    external: [
+      ['server', 'الخادم داخل السعودية', 'Server in Saudi Arabia', 'server', [
+        ['STC Cloud (الرياض/جدة)', 'STC Cloud (Riyadh/Jeddah)', '4 vCPU · 8GB · قاعدة بيانات مُدارة', '4 vCPU · 8GB · managed DB', 0, 1100, 0],
+        ['Oracle Cloud (جدة/الرياض)', 'Oracle Cloud (Jeddah/Riyadh)', '4 OCPU · 16GB · نسخ احتياطي', '4 OCPU · 16GB · backups', 0, 750, 0],
+        ['Google Cloud (الدمام)', 'Google Cloud (Dammam)', '4 vCPU · 8GB · Cloud SQL', '4 vCPU · 8GB · Cloud SQL', 0, 950, 0],
+        ['خادم VPS سعودي (بداية)', 'Saudi VPS (starter)', 'مناسب للبداية وحتى ٥٠٠ طلب يوميًا', 'Good to start, up to ~500 requests/day', 0, 350, 0],
+      ]],
+      ['otp', 'الرسائل النصية ورمز الدخول OTP', 'SMS & OTP codes', 'message-square-lock', [
+        ['Unifonic', 'Unifonic', '≈ ٥٬٠٠٠ رسالة شهريًا · ٠٫٠٩ ر.س', '~5,000 SMS/month · 0.09 SAR', 0, 450, 0],
+        ['Taqnyat', 'Taqnyat', '≈ ٥٬٠٠٠ رسالة شهريًا · ٠٫٠٧ ر.س', '~5,000 SMS/month · 0.07 SAR', 0, 350, 0],
+        ['Msegat', 'Msegat', '≈ ٥٬٠٠٠ رسالة شهريًا · ٠٫٠٧٥ ر.س', '~5,000 SMS/month · 0.075 SAR', 0, 375, 0],
+      ]],
+      ['whatsapp', 'واتساب للأعمال API', 'WhatsApp Business API', 'message-circle', [
+        ['Meta Cloud API (مباشر)', 'Meta Cloud API (direct)', 'رسوم المحادثات فقط', 'Conversation fees only', 0, 200, 0],
+        ['Unifonic WhatsApp', 'Unifonic WhatsApp', 'اشتراك + رسوم المحادثات، دعم محلي', 'Plan + conversation fees, local support', 0, 550, 0],
+        ['360dialog', '360dialog', 'اشتراك شهري + رسوم المحادثات', 'Monthly plan + conversation fees', 0, 400, 0],
+      ]],
+      ['ws', 'التحديثات الفورية (WebSocket)', 'Real-time (WebSocket)', 'radio-tower', [
+        ['على نفس الخادم', 'On our own server', 'بدون تكلفة إضافية', 'No extra cost', 0, 0, 0],
+        ['Pusher Channels', 'Pusher Channels', 'خدمة مُدارة', 'Managed service', 0, 185, 0],
+        ['Ably', 'Ably', 'خدمة مُدارة عالية التحمل', 'Managed, high availability', 0, 110, 0],
+      ]],
+      ['pay', 'بوابة الدفع', 'Payment gateway', 'credit-card', [
+        ['Moyasar', 'Moyasar', 'مدى، Apple Pay، STC Pay، فيزا · رسوم لكل عملية', 'Mada, Apple Pay, STC Pay, Visa · per-transaction fees', 0, 0, 0],
+        ['HyperPay', 'HyperPay', 'رسوم تفعيل + رسوم لكل عملية', 'Setup fee + per-transaction fees', 1500, 0, 0],
+        ['Tap Payments', 'Tap Payments', 'رسوم لكل عملية', 'Per-transaction fees', 0, 0, 0],
+      ]],
+      ['meet', 'الاجتماعات الافتراضية', 'Video meetings', 'video', [
+        ['Jitsi على خادمنا', 'Self-hosted Jitsi', 'بدون اشتراك', 'No subscription', 0, 0, 0],
+        ['Zoom (٣ حسابات)', 'Zoom (3 hosts)', 'اشتراك Pro', 'Pro plan', 0, 165, 0],
+        ['Microsoft Teams', 'Microsoft Teams', 'ضمن Microsoft 365 (٣ مستخدمين)', 'Via Microsoft 365 (3 users)', 0, 170, 0],
+      ]],
+      ['einv', 'الفوترة الإلكترونية (زاتكا)', 'E-invoicing (ZATCA)', 'receipt', [
+        ['ربط مباشر مع فاتورة', 'Direct Fatoora integration', 'مشمول في التطوير', 'Included in the build', 0, 0, 0],
+        ['مزود فوترة معتمد', 'Certified e-invoicing provider', 'اشتراك شهري', 'Monthly plan', 0, 150, 0],
+      ]],
+      ['email', 'البريد الإلكتروني', 'Email', 'mail', [
+        ['Amazon SES', 'Amazon SES', 'رسائل النظام والإشعارات', 'System emails', 0, 20, 0],
+        ['Zoho Mail (٥ مستخدمين)', 'Zoho Mail (5 users)', 'بريد للموظفين', 'Staff mailboxes', 0, 60, 0],
+      ]],
+      ['domain', 'النطاق والشهادة', 'Domain & SSL', 'globe', [
+        ['نطاق ‎.sa + SSL مجاني', '.sa domain + free SSL', 'سنويًا', 'Yearly', 0, 0, 200],
+        ['نطاق ‎.com + SSL مجاني', '.com domain + free SSL', 'سنويًا', 'Yearly', 0, 0, 60],
+      ]],
+    ],
+    terms: { vat: 15, split: ['٤٠٪ عند التوقيع · ٤٠٪ عند التسليم للاختبار · ٢٠٪ عند الإطلاق', '40% on signing · 40% at test delivery · 20% at launch'], weeks: 10, validity: 30 },
+  },
 };
