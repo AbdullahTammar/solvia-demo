@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Solvia — Hotel Operations Portal</title>
+<meta name="description" content="Solvia: one portal for hotel operations, workflows, approvals and service tickets.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Lora:wght@500;600&family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23011f2a'/%3E%3Ctext x='16' y='22' font-size='17' text-anchor='middle' fill='%23e39a5e' font-family='Georgia'%3ES%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/app.css">
+<script>try{const t=localStorage.getItem('solvia-theme');if(t)document.documentElement.dataset.theme=t;const l=localStorage.getItem('solvia-lang');if(l==='ar'){document.documentElement.lang='ar';document.documentElement.dir='rtl'}}catch(e){}</script>
+</head>
+<body>
+<div class="app">
+  <nav class="rail" id="rail"></nav>
+  <aside class="side" id="side"></aside>
+  <main>
+    <header class="top">
+      <button class="iconbtn menu-btn" onclick="App.toggleSide()"><i data-lucide="menu"></i></button>
+      <label class="search"><i data-lucide="search"></i><input id="q" data-ph="search"></label>
+      <div class="sp"></div>
+      <button class="pill" onclick="App.toggleLang()" id="langBtn">العربية</button>
+      <button class="iconbtn" onclick="App.toggleTheme()" title="Theme"><i data-lucide="moon" id="themeIc"></i></button>
+      <button class="iconbtn" onclick="App.go('tickets')"><i data-lucide="bell"></i><span class="dot"></span></button>
+      <div class="avatar">AT</div>
+    </header>
+    <div class="page" id="page"></div>
+  </main>
+</div>
+<div class="scrim" id="scrim" onclick="App.closeAll()"></div>
+<div class="drawer" id="drawer"></div>
+<div class="modal" id="modal"></div>
+<div class="toast" id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

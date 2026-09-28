@@ -1,0 +1,111 @@
+// Demo data, translations and the default price catalog.
+window.D = {
+  devHash: '6d416bd44b627339627dddafc23eea477f1cb4789f3481a443280d08c42d5807',
+  developer: { name: 'Abdullah Tammar', whatsapp: '', email: 'a.tammar@anjumhotels.com' },
+
+  rail: [
+    ['home', 'layout-grid', 'Overview', 'نظرة عامة'],
+    ['finance', 'landmark', 'Finance', 'المالية'],
+    ['analytics', 'chart-line', 'Analytics', 'التحليلات'],
+    ['marketing', 'megaphone', 'Marketing', 'التسويق'],
+    ['events', 'calendar-check', 'Events', 'الفعاليات'],
+    ['frontoffice', 'door-open', 'Front office', 'الاستقبال'],
+    ['fnb', 'utensils', 'Food & beverage', 'الأغذية والمشروبات'],
+    ['housekeeping', 'bed-double', 'Housekeeping', 'التدبير الفندقي'],
+    ['tickets', 'wrench', 'Service desk', 'مكتب الخدمات'],
+    ['security', 'shield', 'Security', 'الأمن'],
+  ],
+
+  nav: [
+    ['overview', [['home', 'activity'], ['profile', 'circle-user-round'], ['community', 'messages-square']]],
+    ['myaccess', [['access', 'shield-check']]],
+    ['workflows', [['approvals', 'stamp'], ['requests', 'send'], ['start', 'circle-plus'], ['masters', 'sliders-horizontal']]],
+    ['service', [['tickets', 'ticket'], ['sla', 'timer']]],
+    ['devgrp', [['dev', 'code-xml'], ['proposal', 'file-signature']]],
+  ],
+
+  t: {
+    en: {
+      search: 'Search guests, tickets, workflows…', overview: 'Overview', myaccess: 'My access', workflows: 'Workflows', service: 'Service desk', devgrp: 'Dev & proposal',
+      home: 'Home', profile: 'My profile', community: 'Community', access: 'My access', approvals: 'Approvals', requests: 'My requests', start: 'Start a workflow', masters: 'Workflow masters',
+      tickets: 'Tickets', sla: 'SLA & reports', dev: 'Dev', proposal: 'Client proposal',
+      greet: 'As-salamu alaykum, Abdullah', heroSub: 'Occupancy is tracking 4% above forecast. Three approvals and five urgent tickets need you today.',
+      arrivals: 'Arrivals today', inhouse: 'Guests in house', departures: 'Departures today', occupancy: 'Occupancy',
+      due: 'still due in', rooms: 'rooms occupied', dueout: 'still due out', vsfc: 'vs. forecast',
+      waiting: 'Waiting on you', pending: 'pending', openQueue: 'Open queue', approve: 'Approve', reject: 'Reject',
+      newTicket: 'New ticket', board: 'Board', list: 'List', all: 'All', mine: 'Assigned to me', urgent: 'Urgent',
+      open: 'Open', inprogress: 'In progress', onhold: 'On hold', resolved: 'Resolved',
+      low: 'Low', medium: 'Medium', high: 'High', critical: 'Critical',
+      title: 'Title', dept: 'Department', priority: 'Priority', room: 'Room / location', desc: 'Description', create: 'Create ticket', cancel: 'Cancel',
+      devLock: 'Developer area', devLockSub: 'Enter the password to edit services and prices.', unlock: 'Unlock', wrongPw: 'Wrong password',
+      approveSign: 'Approve & sign', clientName: 'Your full name', company: 'Company', agree: 'I have reviewed the scope and prices above and agree to the payment terms.',
+      theme: 'Theme', quickStats: 'Today at a glance',
+    },
+    ar: {
+      search: 'ابحث عن ضيوف، تذاكر، مسارات عمل…', overview: 'نظرة عامة', myaccess: 'صلاحياتي', workflows: 'مسارات العمل', service: 'مكتب الخدمات', devgrp: 'التطوير والعرض',
+      home: 'الرئيسية', profile: 'ملفي الشخصي', community: 'المجتمع', access: 'صلاحياتي', approvals: 'الموافقات', requests: 'طلباتي', start: 'بدء مسار عمل', masters: 'إعداد المسارات',
+      tickets: 'التذاكر', sla: 'اتفاقية الخدمة والتقارير', dev: 'المطوّر', proposal: 'عرض السعر للعميل',
+      greet: 'السلام عليكم، عبدالله', heroSub: 'نسبة الإشغال أعلى من المتوقع بـ ٤٪. لديك ثلاث موافقات وخمس تذاكر عاجلة اليوم.',
+      arrivals: 'الوصول اليوم', inhouse: 'النزلاء الحاليون', departures: 'المغادرة اليوم', occupancy: 'نسبة الإشغال',
+      due: 'متبقٍ للوصول', rooms: 'غرفة مشغولة', dueout: 'متبقٍ للمغادرة', vsfc: 'مقابل المتوقع',
+      waiting: 'بانتظارك', pending: 'معلّق', openQueue: 'فتح القائمة', approve: 'موافقة', reject: 'رفض',
+      newTicket: 'تذكرة جديدة', board: 'لوحة', list: 'قائمة', all: 'الكل', mine: 'المسندة إليّ', urgent: 'عاجل',
+      open: 'مفتوحة', inprogress: 'قيد التنفيذ', onhold: 'معلّقة', resolved: 'تم الحل',
+      low: 'منخفضة', medium: 'متوسطة', high: 'عالية', critical: 'حرجة',
+      title: 'العنوان', dept: 'القسم', priority: 'الأولوية', room: 'الغرفة / الموقع', desc: 'الوصف', create: 'إنشاء التذكرة', cancel: 'إلغاء',
+      devLock: 'منطقة المطوّر', devLockSub: 'أدخل كلمة المرور لتعديل الخدمات والأسعار.', unlock: 'فتح', wrongPw: 'كلمة المرور غير صحيحة',
+      approveSign: 'الموافقة والتوقيع', clientName: 'الاسم الكامل', company: 'الشركة', agree: 'اطلعت على النطاق والأسعار أعلاه وأوافق على شروط الدفع.',
+      theme: 'المظهر', quickStats: 'اليوم في لمحة',
+    },
+  },
+
+  approvals: [
+    { id: 'WF-2291', t: 'Purchase request · Linen restock', a: 'طلب شراء · مفارش', by: 'Housekeeping · Sara Q.', amt: 'SAR 18,400', ic: 'shopping-cart' },
+    { id: 'WF-2288', t: 'Leave request · 5 days', a: 'طلب إجازة · ٥ أيام', by: 'Front office · Omar H.', amt: '12–16 Oct', ic: 'plane' },
+    { id: 'WF-2284', t: 'Rate override · Suite 1204', a: 'تعديل سعر · جناح ١٢٠٤', by: 'Reservations · Lina M.', amt: '−22%', ic: 'badge-percent' },
+  ],
+
+  tickets: [
+    { id: 'TK-1042', t: 'AC not cooling', d: 'Engineering', r: '1204', p: 'critical', s: 'open', who: 'KA', age: 25, sla: 60, ch: 'whatsapp' },
+    { id: 'TK-1041', t: 'Extra towels & pillows', d: 'Housekeeping', r: '0817', p: 'medium', s: 'inprogress', who: 'SQ', age: 12, sla: 30, ch: 'app' },
+    { id: 'TK-1040', t: 'Late checkout request', d: 'Front office', r: '1510', p: 'low', s: 'open', who: 'OH', age: 40, sla: 120, ch: 'sms' },
+    { id: 'TK-1039', t: 'Water leak in bathroom', d: 'Engineering', r: '0622', p: 'high', s: 'inprogress', who: 'KA', age: 50, sla: 60, ch: 'phone' },
+    { id: 'TK-1038', t: 'Room service order missing item', d: 'F&B', r: '0911', p: 'medium', s: 'onhold', who: 'RM', age: 35, sla: 45, ch: 'app' },
+    { id: 'TK-1037', t: 'Wi-Fi keeps disconnecting', d: 'IT', r: 'Lobby', p: 'high', s: 'open', who: 'AT', age: 70, sla: 60, ch: 'portal' },
+    { id: 'TK-1036', t: 'Key card not working', d: 'Front office', r: '1102', p: 'medium', s: 'resolved', who: 'OH', age: 8, sla: 20, ch: 'phone' },
+    { id: 'TK-1035', t: 'Noise complaint — floor 7', d: 'Security', r: '07xx', p: 'high', s: 'resolved', who: 'YS', age: 15, sla: 30, ch: 'phone' },
+    { id: 'TK-1034', t: 'Minibar restock', d: 'F&B', r: '1420', p: 'low', s: 'inprogress', who: 'RM', age: 22, sla: 90, ch: 'app' },
+  ],
+
+  // Default catalog (SAR). Editable in the Dev section.
+  catalog: [
+    { g: 'Platform', items: [
+      ['core', 'Core portal, login & roles', 'البوابة الأساسية وتسجيل الدخول والصلاحيات', 'Secure login, user roles, audit log, bilingual AR/EN shell', 14000, 'once'],
+      ['dash', 'Operations dashboard', 'لوحة العمليات', 'Arrivals, in-house, departures, occupancy, live KPIs', 12000, 'once'],
+      ['wf', 'Workflows & approvals engine', 'محرك مسارات العمل والموافقات', 'Configurable multi-step approvals, delegations, reminders', 26000, 'once'],
+      ['tk', 'Service desk / ticketing with SLA', 'نظام التذاكر مع اتفاقية الخدمة', 'Kanban board, SLA timers, escalation, reports, guest channels', 24000, 'once'],
+      ['comm', 'Community & announcements', 'المجتمع والإعلانات', 'Staff news feed, reactions, pinned notices', 7000, 'once'],
+      ['access', 'Access management', 'إدارة الصلاحيات', 'Request / grant system access with approval trail', 8000, 'once'],
+      ['mobile', 'Mobile-ready PWA', 'تطبيق ويب للجوال', 'Installable on iOS/Android, push notifications', 9000, 'once'],
+      ['reports', 'Reports & exports', 'التقارير والتصدير', 'PDF / Excel exports, scheduled email reports', 8000, 'once'],
+    ]},
+    { g: 'Integrations', items: [
+      ['sms', 'SMS gateway integration', 'ربط بوابة الرسائل النصية', 'Unifonic / Taqnyat / Msegat — OTP & notifications', 3500, 'once'],
+      ['smsc', 'SMS credits (≈10,000 messages)', 'رصيد رسائل (≈١٠٬٠٠٠ رسالة)', 'Pass-through provider cost, ≈ 0.08 SAR / SMS', 800, 'month'],
+      ['wa', 'WhatsApp Business API', 'واتساب للأعمال API', 'Official Meta API: ticket updates, guest chat, templates', 7500, 'once'],
+      ['wac', 'WhatsApp conversation fees', 'رسوم محادثات واتساب', 'Pass-through Meta fees (estimate)', 600, 'month'],
+      ['email', 'Email (SMTP / Microsoft 365)', 'البريد الإلكتروني', 'Transactional email & notifications', 1500, 'once'],
+      ['sso', 'Single sign-on (Microsoft Entra ID)', 'تسجيل دخول موحّد', 'Staff sign in with company Microsoft account', 5000, 'once'],
+      ['pms', 'PMS integration (Opera / OHIP)', 'الربط مع نظام إدارة الفندق', 'Live arrivals, in-house and room status', 18000, 'once'],
+      ['nafath', 'Nafath / Absher identity', 'التحقق عبر نفاذ', 'National ID verification for staff & contractors', 9000, 'once'],
+    ]},
+    { g: 'Hosting & support', items: [
+      ['ksa', 'Hosting in Saudi Arabia (setup)', 'استضافة داخل السعودية (تجهيز)', 'Riyadh / Jeddah region, NCA / PDPL data residency', 4000, 'once'],
+      ['ksam', 'Saudi cloud server & backups', 'خادم سحابي في السعودية ونسخ احتياطي', 'Managed server, SSL, daily backups, monitoring', 1400, 'month'],
+      ['sup', 'Support & maintenance', 'الدعم والصيانة', 'Bug fixes, updates, 8×5 support, 4h critical response', 2500, 'month'],
+      ['train', 'Training & go-live', 'التدريب والإطلاق', '2 onsite sessions, user guides in Arabic & English', 3000, 'once'],
+    ]},
+  ],
+  defaultOn: ['core', 'dash', 'wf', 'tk', 'comm', 'access', 'sms', 'smsc', 'wa', 'wac', 'email', 'ksa', 'ksam', 'sup', 'train'],
+  terms: { vat: 15, discount: 0, split: '40/40/20', splitNote: '40% on signing · 40% on UAT · 20% on go-live', validity: 30, weeks: 10 },
+};
