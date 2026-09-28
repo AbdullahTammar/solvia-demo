@@ -1,7 +1,7 @@
 // Demo data, translations and the default price catalog.
 window.D = {
   devHash: '6d416bd44b627339627dddafc23eea477f1cb4789f3481a443280d08c42d5807',
-  developer: { name: 'Abdullah Tammar', whatsapp: '', email: 'a.tammar@anjumhotels.com' },
+  developer: { name: 'Abdullah Tammar', whatsapp: '', email: '' },
 
   rail: [
     ['home', 'layout-grid', 'Overview', 'نظرة عامة'],

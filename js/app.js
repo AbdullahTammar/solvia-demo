@@ -23,7 +23,7 @@ function defaultCfg() {
   const items = [];
   D.catalog.forEach(g => g.items.forEach(([id, en, a, desc, price, freq]) =>
     items.push({ id, g: g.g, en, ar: a, desc, price, freq, on: D.defaultOn.includes(id), opt: ['nafath', 'pms', 'sso', 'mobile', 'reports'].includes(id) })));
-  return { items, terms: { ...D.terms }, client: 'Anjum Hotels', project: 'Solvia — Hotel Operations Portal', note: '' };
+  return { items, terms: { ...D.terms }, client: 'Client', project: 'Solvia — Hotel Operations Portal', note: '' };
 }
 let cfg = store.get('cfg', null) || defaultCfg();
 const saveCfg = () => store.set('cfg', cfg);
@@ -43,7 +43,7 @@ function totals(items, terms) {
 function shell() {
   $('#rail').innerHTML = `<div class="logo">S</div>` + D.rail.map(([id, i, en, a]) =>
     `<button title="${esc(L(en, a))}" data-r="${id}" onclick="App.go('${id === 'home' ? 'home' : id}')">${ic(i)}</button>`).join('') + `<div class="sp"></div>`;
-  $('#side').innerHTML = `<div class="brand"><b>Solvia</b><small>${L('Anjum Hotels · Makkah', 'فنادق أنجم · مكة المكرمة')}</small></div>` +
+  $('#side').innerHTML = `<div class="brand"><b>Solvia</b><small>${L('Operations portal', 'بوابة العمليات')}</small></div>` +
     D.nav.map(([g, items]) => `<div class="grp">${T(g)}</div>` + items.map(([id, i]) => {
       const b = id === 'approvals' ? `<span class="badge">${approvals.length}</span>` : id === 'tickets' ? `<span class="badge">${tickets.filter(t => t.s !== 'resolved').length}</span>` : id === 'dev' ? ic('lock', 'badge-ic') : '';
       return `<button class="nav ${id === 'dev' ? 'dev' : ''}" data-n="${id}" onclick="App.go('${id}')">${ic(i)}<span>${T(id)}</span>${b ? `<span class="badge-w" style="margin-inline-start:auto">${b}</span>` : ''}</button>`;
@@ -107,10 +107,10 @@ const pages = {
     </div>`;
   },
   profile() {
-    return hero(T('profile'), 'Abdullah Tammar', L('IT Systems Manager · Anjum Hotel Makkah', 'مدير أنظمة تقنية المعلومات · فندق أنجم مكة')) +
+    return hero(T('profile'), 'Abdullah Tammar', L('IT Systems Manager', 'مدير أنظمة تقنية المعلومات')) +
     `<div class="grid g3 section">${stat('briefcase', L('Department', 'القسم'), 'IT', L('Since 2021', 'منذ ٢٠٢١'), false)}${stat('ticket-check', L('Tickets closed', 'تذاكر مغلقة'), num(312), L('+18 this month', '+١٨ هذا الشهر'))}${stat('stamp', L('Approvals given', 'موافقات'), num(128), L('avg. 2.1h response', 'متوسط ٢٫١ ساعة'), false)}</div>
     <div class="card section"><h2 style="margin-bottom:14px">${L('Details', 'التفاصيل')}</h2><div class="grid g2">
-    ${[['Email', 'البريد', 'a.tammar@anjumhotels.com'], ['Phone', 'الجوال', '+966 5• ••• ••••'], ['Location', 'الموقع', L('Makkah, Ajyad', 'مكة، أجياد')], ['Manager', 'المدير', 'General Manager']].map(([e, a, v]) => `<label class="field">${L(e, a)}<input class="input" value="${esc(v)}"></label>`).join('')}</div></div>`;
+    ${[['Email', 'البريد', '—'], ['Phone', 'الجوال', '+966 5• ••• ••••'], ['Location', 'الموقع', L('Makkah, Ajyad', 'مكة، أجياد')], ['Manager', 'المدير', 'General Manager']].map(([e, a, v]) => `<label class="field">${L(e, a)}<input class="input" value="${esc(v)}"></label>`).join('')}</div></div>`;
   },
   community() {
     return hero(T('community'), L('What\'s happening', 'ماذا يحدث'), L('Announcements, shout-outs and news from every department.', 'الإعلانات والتقدير والأخبار من جميع الأقسام.')) +
