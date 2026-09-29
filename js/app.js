@@ -96,12 +96,19 @@ function closeAll() { ['#modal', '#scrim'].forEach(s => $(s)?.classList.remove('
 const mHead = (t, sub = '') => `<div class="card-h" style="margin-bottom:6px"><div><h2>${t}</h2>${sub ? `<div class="small muted">${sub}</div>` : ''}</div><button class="iconbtn" onclick="App.close()">${ic('x')}</button></div>`;
 const brand = (light = false) => `<div class="brand" onclick="App.go('')"><div class="logo-mark">S</div><b ${light ? 'style="color:#fff"' : ''}>${BRAND}</b></div>`;
 
+// Logo sources, tried in order: logos/<id>.png (official file in the repo) → Google favicon → DuckDuckGo icon → monogram
+window.__logoNext = img => {
+  const list = img.dataset.srcs.split('|'); const i = +img.dataset.i + 1;
+  if (i < list.length) { img.dataset.i = i; img.src = list[i]; } else img.remove();
+};
+window.__logoOk = img => { if (img.naturalWidth < 24 && !img.src.includes('logos/')) return window.__logoNext(img); img.classList.add('ok'); };
 function plogo(pid, cls = '') {
   const p = plat(pid);
-  if (!p) return `<div class="plogo ${cls}" style="background:var(--accent-soft);color:var(--accent)">${ic('sparkles')}</div>`;
-  if (p.logo) return `<div class="plogo ${cls}"><img src="${p.logo}" alt=""></div>`;
-  const abbr = (en() ? p.en : p.ar).replace(/^ال/, '').slice(0, 2);
-  return `<div class="plogo ${cls}"><span class="mono" style="background:${p.color}">${esc(abbr)}</span>${p.domain ? `<img src="https://www.google.com/s2/favicons?domain=${p.domain}&sz=128" alt="${esc(p.en)}" onload="if(this.naturalWidth>20)this.previousElementSibling.remove();else this.remove()" onerror="this.remove()" style="position:relative">` : ''}</div>`;
+  if (!p) return `<div class="plogo ${cls}" style="background:linear-gradient(135deg,var(--accent-soft),var(--surface));color:var(--accent)">${ic('sparkles')}</div>`;
+  if (p.logo) return `<div class="plogo ${cls}"><img class="ok" src="${p.logo}" alt=""></div>`;
+  const abbr = (en() ? p.en : p.ar).replace(/^ال/, '').slice(0, en() ? 2 : 1);
+  const srcs = [`logos/${p.id}.png`, ...(p.domain ? [`https://www.google.com/s2/favicons?domain=${p.domain}&sz=128`, `https://icons.duckduckgo.com/ip3/${p.domain}.ico`] : [])];
+  return `<div class="plogo ${cls}"><span class="mono" style="--c:${p.color}">${esc(abbr)}</span><img alt="${esc(p.en)}" src="${srcs[0]}" data-srcs="${srcs.join('|')}" data-i="0" onload="__logoOk(this)" onerror="__logoNext(this)"></div>`;
 }
 function svcLogo(s, cls = '') {
   if (s.logo) return `<div class="plogo ${cls}"><img src="${s.logo}" alt=""></div>`;
@@ -546,7 +553,7 @@ C.customers = () => hero(A('العملاء', 'Customers'), A('قاعدة بيا�
 C.platforms = () => hero(A('المنصات الحكومية', 'Government platforms'), A('كل المنصات في مكان واحد', 'Every platform in one place'), A('وصول سريع للموظف أثناء تنفيذ الطلبات.', 'Quick access while working on requests.'),
   R.role === 'supervisor' ? `<button class="btn" onclick="App.addPlatform()">${ic('plus')}${A('إضافة منصة', 'Add platform')}</button>` : '') +
   `<div class="grid g3 section">${platforms.map(p => `<div class="card hov"><div style="display:flex;gap:12px;align-items:center">${plogo(p.id, 'lg')}<div style="flex:1"><b style="font-size:16px">${nm(p)}</b><div class="small muted">${esc(p.domain || '')}</div></div></div>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:8px"><span class="small muted">${tickets.filter(t => svc(t.svc).pl === p.id && t.st !== 'done').length} ${A('تذاكر مفتوحة', 'open tickets')} · ${services.filter(s => s.pl === p.id).length} ${A('خدمات', 'services')}</span><a class="btn sm ghost" href="${esc(p.url)}" target="_blank" rel="noopener">${ic('external-link')}${A('فتح', 'Open')}</a></div></div>`).join('')}</div>`;
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:8px"><span class="small muted">${tickets.filter(t => svc(t.svc).pl === p.id && t.st !== 'done').length} ${A('تذاكر مفتوحة', 'open tickets')} · ${services.filter(s => s.pl === p.id).length} ${A('خدمات', 'services')}</span><span style="display:flex;gap:6px">${R.role === 'supervisor' ? `<label class="btn sm ghost" style="cursor:pointer" title="${A('تغيير الشعار', 'Change logo')}">${ic('image-up')}<input type="file" accept="image/*" hidden onchange="App.platLogo('${p.id}',this)"></label>` : ''}<a class="btn sm ghost" href="${esc(p.url)}" target="_blank" rel="noopener">${ic('external-link')}${A('فتح', 'Open')}</a></span></div></div>`).join('')}</div>`;
 
 /* ======================================================
    SUPERVISOR
@@ -808,6 +815,7 @@ window.App = {
       <label class="field">${A('رابط المنصة', 'Website')}<input class="input" id="pUrl" dir="ltr" placeholder="https://business.absher.sa"></label>
       <button class="btn" onclick="App.savePlatform()">${ic('check')}${A('حفظ', 'Save')}</button></div>`);
   },
+  platLogo(id, input) { readImage(input, d => { plat(id).logo = d; save(); render(); toast(A('تم تحديث الشعار في كل الموقع', 'Logo updated everywhere'), 'image'); }); },
   savePlatform() {
     const ar = $('#pAr').value.trim(), e = $('#pEn').value.trim(), url = $('#pUrl').value.trim(); if (!ar && !e) return toast(A('أدخل اسم المنصة', 'Enter a name'), 'circle-alert');
     let domain = ''; try { domain = new URL(url).hostname; } catch (x) {}
