@@ -4,6 +4,9 @@ window.D = {
   devHash: '6d416bd44b627339627dddafc23eea477f1cb4789f3481a443280d08c42d5807',
   developer: { whatsapp: '', email: '' },
 
+  // extra domains to try for a logo
+  logoAlt: { najiz: ['www.najiz.sa', 'moj.gov.sa'], sdb: ['sdb.gov.sa'] },
+
   // [id, ar, en, domain (for the logo), brand colour, url]
   platforms: [
     ['qiwa', 'قوى', 'Qiwa', 'qiwa.sa', '#0f7a6c', 'https://qiwa.sa'],

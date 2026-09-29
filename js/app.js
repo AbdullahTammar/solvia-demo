@@ -107,7 +107,8 @@ function plogo(pid, cls = '') {
   if (!p) return `<div class="plogo ${cls}" style="background:linear-gradient(135deg,var(--accent-soft),var(--surface));color:var(--accent)">${ic('sparkles')}</div>`;
   if (p.logo) return `<div class="plogo ${cls}"><img class="ok" src="${p.logo}" alt=""></div>`;
   const abbr = (en() ? p.en : p.ar).replace(/^ال/, '').slice(0, en() ? 2 : 1);
-  const srcs = [`logos/${p.id}.png`, ...(p.domain ? [`https://www.google.com/s2/favicons?domain=${p.domain}&sz=128`, `https://icons.duckduckgo.com/ip3/${p.domain}.ico`] : [])];
+  const doms = p.domain ? [p.domain, ...(D.logoAlt[p.id] || [])] : [];
+  const srcs = [`logos/${p.id}.png`, ...doms.flatMap(d => [`https://icon.horse/icon/${d}`, `https://www.google.com/s2/favicons?domain=${d}&sz=128`, `https://icons.duckduckgo.com/ip3/${d}.ico`])];
   return `<div class="plogo ${cls}"><span class="mono" style="--c:${p.color}">${esc(abbr)}</span><img alt="${esc(p.en)}" src="${srcs[0]}" data-srcs="${srcs.join('|')}" data-i="0" onload="__logoOk(this)" onerror="__logoNext(this)"></div>`;
 }
 function svcLogo(s, cls = '') {
