@@ -341,3 +341,13 @@ tr.click{cursor:pointer}tr.click:hover td{background:var(--surface-2)}
 .strip .pl:hover{background:var(--surface-2)}
 :root[data-theme="dark"] .plogo{background:#f4f1ea}
 .strip .card{justify-content:center}
+/* modern scrollbars, follow light/dark theme */
+:root{--sb-thumb:color-mix(in srgb,var(--accent) 45%,var(--border));--sb-thumb-h:var(--accent)}
+:root[data-theme="dark"]{--sb-thumb:color-mix(in srgb,var(--accent) 35%,var(--surface-2))}
+*{scrollbar-width:thin;scrollbar-color:var(--sb-thumb) transparent}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--sb-thumb);border-radius:999px;border:3px solid transparent;background-clip:padding-box}
+::-webkit-scrollbar-thumb:hover{background:var(--sb-thumb-h);background-clip:padding-box;border:2px solid transparent}
+::-webkit-scrollbar-button,::-webkit-scrollbar-corner{display:none;background:transparent}
+.rail::-webkit-scrollbar,.side::-webkit-scrollbar{width:6px}
