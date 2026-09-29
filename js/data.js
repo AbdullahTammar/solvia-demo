@@ -36,7 +36,7 @@ window.D = {
     ['AO', 'أحمد العتيبي', 'Ahmed Alotaibi', 'employee'],
     ['NS', 'نورة السبيعي', 'Noura Alsubaie', 'employee'],
     ['KH', 'خالد الحربي', 'Khalid Alharbi', 'employee'],
-    ['SM', 'سارة المطيري', 'Sara Almutairi', 'supervisor'],
+    ['RH', 'روان هاشم', 'Rawan Hashim', 'supervisor'],
   ],
 
   customers: [

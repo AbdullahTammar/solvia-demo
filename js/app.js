@@ -36,7 +36,7 @@ let session = store.get('session', null);   // null | customer | employee | supe
 let ctype = store.get('ctype', 'ind');       // customer account: ind (individual) | biz (company)
 const cid = () => ctype === 'biz' ? 'C2' : 'C1';
 const save = () => { store.set('platforms', platforms); store.set('services', services); store.set('tickets', tickets); store.set('msgs', msgs); store.set('meetings', meetings); };
-const ME = { customer: 'C1', employee: 'AO', supervisor: 'SM' };
+const ME = { customer: 'C1', employee: 'AO', supervisor: 'RH' };
 const svc = id => services.find(s => s.id === id) || services[0];
 const plat = id => platforms.find(p => p.id === id);
 const cust = id => D.customers.find(c => c[0] === id);
@@ -561,7 +561,7 @@ C.platforms = () => hero(A('المنصات الحكومية', 'Government platfo
 const empOptions = sel => D.staff.filter(x => x[3] === 'employee').map(x => `<option value="${x[0]}" ${sel === x[0] ? 'selected' : ''}>${A(x[1], x[2])}</option>`).join('');
 C.overview = () => {
   const open = tickets.filter(t => t.st !== 'done'), rev = tickets.reduce((a, t) => a + t.paid, 0) + 176340;
-  return hero(A('لوحة المشرف', 'Supervisor overview'), A('مساء الخير، سارة', 'Good evening, Sara'), A(`${open.length} تذاكر مفتوحة · ${open.filter(t => !t.emp).length} غير مسندة · ${open.filter(t => t.age > slaOf(t)).length} متأخرة`, `${open.length} open · ${open.filter(t => !t.emp).length} unassigned · ${open.filter(t => t.age > slaOf(t)).length} overdue`),
+  return hero(A('لوحة المشرف', 'Supervisor overview'), A('مساء الخير، روان', 'Good evening, Rawan'), A(`${open.length} تذاكر مفتوحة · ${open.filter(t => !t.emp).length} غير مسندة · ${open.filter(t => t.age > slaOf(t)).length} متأخرة`, `${open.length} open · ${open.filter(t => !t.emp).length} unassigned · ${open.filter(t => t.age > slaOf(t)).length} overdue`),
     `<button class="btn" onclick="App.go('${link('desk')}')">${ic('kanban')}${A('فتح التذاكر', 'Open tickets')}</button><button class="btn light" onclick="App.addService()">${ic('plus')}${A('خدمة جديدة', 'New service')}</button>`) +
   `<div class="grid g4 section">${stat('wallet', A('إيرادات الشهر', 'Revenue (month)'), money(rev), '+12%', true)}${stat('inbox', A('طلبات اليوم', 'Requests today'), 17, A('٩ عبر واتساب', '9 via WhatsApp'))}${stat('timer', A('ضمن المهلة', 'Within SLA'), '94%', '+2%', true)}${stat('star', A('رضا العملاء', 'CSAT'), '4.9', A('من ٥', 'out of 5'))}</div>
   <div class="grid g21 section"><div class="card"><div class="card-h"><h2>${A('تحتاج إسناد', 'Needs assignment')}</h2><button class="link" onclick="App.desk('f','unassigned');App.go('${link('desk')}')">${A('عرض', 'View')}</button></div>
