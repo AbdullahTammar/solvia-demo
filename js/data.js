@@ -137,6 +137,6 @@ window.D = {
         ['نطاق ‎.com + SSL مجاني', '.com domain + free SSL', 'سنويًا', 'Yearly', 0, 0, 60],
       ]],
     ],
-    terms: { vat: 0, split: ['٤٠٪ عند التوقيع · ٤٠٪ عند التسليم للاختبار · ٢٠٪ عند الإطلاق', '40% on signing · 40% at test delivery · 20% at launch'], weeks: 10, validity: 30 },
+    terms: { vat: 0, split: ['٤٠٪ عند التوقيع · ٤٠٪ عند التسليم للاختبار · ٢٠٪ عند الإطلاق', '40% on signing · 40% at test delivery · 20% at launch'], weeks: 8, validity: 30 },
   },
 };
