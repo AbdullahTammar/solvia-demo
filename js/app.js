@@ -643,7 +643,6 @@ function pricingPage() {
 
   <div class="sumbox"><div class="card"><div class="eyebrow">${A('الملخص', 'Summary')}</div>
     <div class="tline big"><span>${A('أتعاب التطوير', 'Development fee')}</span><span class="money">${money(t.now)}</span></div>
-    <div class="split">${[40, 40, 20].map((p, i) => `<div><b class="money">${money(t.now * p / 100)}</b>${[A('عند التوقيع', 'On signing'), A('عند التسليم للاختبار', 'At test delivery'), A('عند الإطلاق', 'At launch')][i]}</div>`).join('')}</div>
     <div class="small muted" style="margin:16px 0 4px;font-weight:700">${A('إضافي — يُدفع للمزودين مباشرة', 'Extra — paid to providers directly')}</div>
     <div class="tline"><span>${A('خدمات خارجية شهريًا', 'Outside services monthly')}</span><b class="money">${money(t.eMonth)}${A(' /ش', ' /mo')}</b></div>
     ${t.eOnce ? `<div class="tline"><span>${A('خدمات خارجية مرة واحدة', 'Outside services one-time')}</span><b class="money">${money(t.eOnce)}</b></div>` : ''}
