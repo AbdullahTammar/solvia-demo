@@ -8,8 +8,8 @@
    ============================================================ */
 const $ = s => document.querySelector(s);
 const store = {
-  get(k, d) { try { const v = localStorage.getItem('solvia4-' + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
-  set(k, v) { try { localStorage.setItem('solvia4-' + k, JSON.stringify(v)); } catch (e) {} },
+  get(k, d) { try { const v = localStorage.getItem('solvia5-' + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem('solvia5-' + k, JSON.stringify(v)); } catch (e) {} },
 };
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const en = () => document.documentElement.lang === 'en';

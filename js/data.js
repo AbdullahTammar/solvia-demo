@@ -7,12 +7,12 @@ window.D = {
   // [id, ar, en, domain (for the logo), brand colour, url]
   platforms: [
     ['qiwa', 'قوى', 'Qiwa', 'qiwa.sa', '#0f7a6c', 'https://qiwa.sa'],
-    ['mudad', 'مدد', 'Mudad', 'mudad.com.sa', '#1d6f5a', 'https://mudad.com.sa'],
+    ['mudad', 'مدد', 'Mudad', 'mdd.sa', '#1d6f5a', 'https://www.mdd.sa/'],
     ['gosi', 'التأمينات الاجتماعية', 'GOSI', 'gosi.gov.sa', '#1a7f4b', 'https://www.gosi.gov.sa'],
     ['hrsd', 'وزارة الموارد البشرية', 'HRSD', 'hrsd.gov.sa', '#2b6e3f', 'https://www.hrsd.gov.sa'],
     ['musaned', 'مساند', 'Musaned', 'musaned.com.sa', '#7a5a1f', 'https://musaned.com.sa'],
-    ['sdb', 'بنك التنمية الاجتماعية', 'Social Development Bank', 'sdb.gov.sa', '#0e6b57', 'https://www.sdb.gov.sa'],
-    ['najiz', 'ناجز', 'Najiz', 'najiz.sa', '#b08a3e', 'https://najiz.sa'],
+    ['sdb', 'بنك التنمية الاجتماعية', 'Social Development Bank', 'www.sdb.gov.sa', '#0e6b57', 'https://www.sdb.gov.sa/ar'],
+    ['najiz', 'ناجز', 'Najiz', 'najiz.sa', '#b08a3e', 'https://najiz.sa/applications/landing'],
   ],
 
   // [id, platform ('' = AR SOLVIA service), ar, en, desc ar, desc en, price SAR, audience, business days, icon]
