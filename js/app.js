@@ -603,7 +603,7 @@ psel.vat = false;   // freelancer: no VAT
 const pricingUnlocked = () => { try { return sessionStorage.getItem('solvia-price') === '1'; } catch (e) { return false; } };
 function pricingTotals() {
   const build = PX.build.reduce((a, x) => a + x[4], 0) + PX.buildOptional.filter((x, i) => psel.opt.includes(i)).reduce((a, x) => a + x[4], 0);
-  const care = psel.care >= 0 ? PX.care[psel.care][4] : 0;
+  const care = 0;
   let eOnce = 0, eMonth = 0, eYear = 0;
   PX.external.forEach(e => { const o = e[4][psel.ext[e[0]] || 0]; eOnce += o[4]; eMonth += o[5]; eYear += o[6]; });
   const v = psel.vat ? 1.15 : 1;
@@ -617,42 +617,31 @@ function pricingPage() {
   const freqTxt = o => o[5] ? money(o[5]) + A(' / شهريًا', ' / month') : o[6] ? money(o[6]) + A(' / سنويًا', ' / year') : o[4] ? money(o[4]) + A(' مرة واحدة', ' one-time') : A('بدون رسوم ثابتة', 'No fixed fee');
   return top + `<div class="wrap" style="padding-top:24px;padding-bottom:60px">
   <section class="hero"><div class="eyebrow">${ic('file-signature')}${A('عرض سعر', 'Price proposal')} · SLV-2026-01</div><h1>${A(`تطوير منصة ${BRAND} للخدمات الحكومية`, `Building the ${BRAND} government-services platform`)}</h1>
-    <p>${A('ينقسم العرض إلى ثلاثة أجزاء واضحة: (١) بناء المنصة كاملة — الواجهة والخلفية وقاعدة البيانات والأمان والخادم — وأتولاها أنا بالكامل. (٢) الدعم الشهري بعد الإطلاق. (٣) خدمات خارجية يدفعها العميل للمزود مباشرة، وأنا أتولى إعدادها وربطها. اختر ما يناسبك في كل جزء.', 'This proposal has three clear parts: (1) building the whole platform — front end, back end, database, security and server — which I handle fully; (2) monthly support after launch; (3) outside services the client pays to the provider directly, which I set up and connect. Choose what suits you in each part.')}</p>
+    <p>${A('العرض من جزأين: (١) أتعاب التطوير — بناء المنصة كاملة (الواجهات، الخلفية، قاعدة البيانات، الأمان، تجهيز الخادم والإطلاق) بمبلغ ثابت. (٢) خدمات خارجية إضافية يدفعها العميل للمزود مباشرة، وأنا أتولى إعدادها وربطها.', 'Two parts: (1) the development fee — building the whole platform (interfaces, back end, database, security, server setup and launch) for one fixed amount; (2) extra outside services the client pays to providers directly, which I set up and connect.')}</p>
     <div class="actions"><span class="badge" style="background:rgba(255,255,255,.1);color:#fff">${ic('calendar')}${A('مدة التنفيذ: شهران (٨ أسابيع)', 'Delivery: 2 months (8 weeks)')}</span><span class="badge" style="background:rgba(255,255,255,.1);color:#fff">${ic('clock')}${A('صالح ', 'Valid ')}${PX.terms.validity}${A(' يومًا', ' days')}</span><span class="badge" style="background:rgba(255,255,255,.1);color:#fff">${ic('user-check')}${A('مطوّر مستقل · بدون ضريبة قيمة مضافة', 'Freelance developer · no VAT')}</span></div></section>
 
   <div class="grid g21 section" style="align-items:start"><div>
-    <div class="card bucket"><div class="bucket-h"><div class="ic">${ic('code-xml')}</div><div><span class="badge">${A('الجزء ١ · أتولاه أنا', 'Part 1 · handled by me')}</span><h2 style="margin-top:4px">${A('بناء المنصة', 'Building the platform')}</h2></div></div>
+    <div class="card bucket"><div class="bucket-h"><div class="ic">${ic('code-xml')}</div><div><span class="badge">${A('أتعابي', 'My fee')}</span><h2 style="margin-top:4px">${A('بناء المنصة', 'Building the platform')}</h2></div></div>
       <p class="muted small">${A('يشمل كل شيء لتشغيل المنصة: الموقع العام، تطبيق العميل، بوابة الموظفين والمشرف، قاعدة البيانات، الأمان، وتجهيز الخادم.', 'Everything to run the platform: public site, customer app, staff & supervisor portal, database, security and server setup.')}</p>
-      ${PX.build.map(x => `<div class="line"><div><b>${A(x[0], x[1])}</b><div class="d">${A(x[2], x[3])}</div></div><b class="money">${money(x[4])}</b></div>`).join('')}
-      <div class="line" style="background:var(--surface-2);border-radius:12px;padding:12px;border:0;margin-top:6px"><b>${A('إجمالي البناء', 'Build subtotal')}</b><b class="money">${money(PX.build.reduce((a, x) => a + x[4], 0))}</b></div>
-      <div class="small muted" style="margin:16px 0 4px;font-weight:700">${A('إضافات اختيارية', 'Optional add-ons')}</div>
-      ${PX.buildOptional.map((x, i) => `<label class="opt ${psel.opt.includes(i) ? 'on' : ''}"><input type="checkbox" ${psel.opt.includes(i) ? 'checked' : ''} onchange="App.popt(${i},this.checked)"><div class="grow"><b>${A(x[0], x[1])}</b><div class="small muted">${A(x[2], x[3])}</div></div><div class="pr">${money(x[4])}</div></label>`).join('')}</div>
+      ${PX.build.map(x => `<div class="line"><div style="display:flex;gap:10px"><span style="color:var(--ok)">${ic('check')}</span><div><b>${A(x[0], x[1])}</b><div class="d">${A(x[2], x[3])}</div></div></div></div>`).join('')}
+      <div class="line" style="background:var(--accent-soft);border-radius:14px;padding:16px;border:0;margin-top:8px;align-items:center"><b style="font-size:16px">${A('أتعاب التطوير (مبلغ ثابت)', 'Development fee (fixed)')}</b><b class="money" style="font-size:24px;color:var(--accent)">${money(PX.build.reduce((a, x) => a + x[4], 0))}</b></div></div>
 
-    <div class="card bucket section"><div class="bucket-h"><div class="ic">${ic('life-buoy')}</div><div><span class="badge">${A('الجزء ٢ · أتولاه أنا', 'Part 2 · handled by me')}</span><h2 style="margin-top:4px">${A('الدعم والصيانة الشهرية', 'Monthly support & maintenance')}</h2></div></div>
-      <p class="muted small">${A('يبدأ بعد الإطلاق. أول شهر مجاني.', 'Starts after launch. First month free.')}</p>
-      ${PX.care.map((x, i) => `<label class="opt ${psel.care === i ? 'on' : ''}"><input type="radio" name="care" ${psel.care === i ? 'checked' : ''} onchange="App.pset('care',${i})"><div class="grow"><b>${A(x[0], x[1])}</b><div class="small muted">${A(x[2], x[3])}</div></div><div class="pr">${money(x[4])}<small>${A('شهريًا', 'per month')}</small></div></label>`).join('')}
-      <label class="opt ${psel.care === -1 ? 'on' : ''}"><input type="radio" name="care" ${psel.care === -1 ? 'checked' : ''} onchange="App.pset('care',-1)"><div class="grow"><b>${A('بدون دعم شهري', 'No monthly support')}</b><div class="small muted">${A('الإصلاحات بعد أول شهر تُحسب بالساعة (٢٥٠ ر.س)', 'Fixes after the first month billed hourly (250 SAR)')}</div></div></label></div>
-
-    <div class="card bucket section"><div class="bucket-h"><div class="ic">${ic('server')}</div><div><span class="badge info">${A('الجزء ٣ · يدفعها العميل للمزود', 'Part 3 · paid to providers')}</span><h2 style="margin-top:4px">${A('الخدمات الخارجية', 'Outside services')}</h2></div></div>
+    <div class="card bucket section"><div class="bucket-h"><div class="ic">${ic('server')}</div><div><span class="badge info">${A('إضافي · يدفعها العميل للمزود', 'Extra · paid to providers')}</span><h2 style="margin-top:4px">${A('الخدمات الخارجية', 'Outside services')}</h2></div></div>
       <p class="muted small">${A('تكاليف تشغيل تُدفع للشركات المزودة مباشرة (أسعار تقريبية وتتغير حسب الاستخدام). أنا أتولى إعدادها وربطها ضمن البناء.', 'Running costs paid directly to providers (estimates; they vary with usage). I set them up and connect them as part of the build.')}</p>
       ${PX.external.map(e => `<div style="margin-top:18px"><div style="display:flex;gap:8px;align-items:center;font-weight:700">${ic(e[3])}${A(e[1], e[2])}</div>
         ${e[4].map((o, i) => `<label class="opt ${(psel.ext[e[0]] || 0) === i ? 'on' : ''}"><input type="radio" name="${e[0]}" ${(psel.ext[e[0]] || 0) === i ? 'checked' : ''} onchange="App.pext('${e[0]}',${i})"><div class="grow"><b>${A(o[0], o[1])}</b>${i === 0 ? ` <span class="badge ok">${A('موصى به', 'Recommended')}</span>` : ''}<div class="small muted">${A(o[2], o[3])}</div></div><div class="pr">${freqTxt(o)}</div></label>`).join('')}</div>`).join('')}</div>
   </div>
 
   <div class="sumbox"><div class="card"><div class="eyebrow">${A('الملخص', 'Summary')}</div>
-    <div class="tline" style="margin-top:10px"><span>${A('بناء المنصة (لي)', 'Platform build (me)')}</span><b class="money">${money(t.build)}</b></div>
-    <div class="tline"><span>${A('الدعم الشهري (لي)', 'Monthly support (me)')}</span><b class="money">${money(t.care)}${A(' /ش', ' /mo')}</b></div>
+    <div class="tline big"><span>${A('أتعاب التطوير', 'Development fee')}</span><span class="money">${money(t.now)}</span></div>
+    <div class="split">${[40, 40, 20].map((p, i) => `<div><b class="money">${money(t.now * p / 100)}</b>${[A('عند التوقيع', 'On signing'), A('عند التسليم للاختبار', 'At test delivery'), A('عند الإطلاق', 'At launch')][i]}</div>`).join('')}</div>
+    <div class="small muted" style="margin:16px 0 4px;font-weight:700">${A('إضافي — يُدفع للمزودين مباشرة', 'Extra — paid to providers directly')}</div>
     <div class="tline"><span>${A('خدمات خارجية شهريًا', 'Outside services monthly')}</span><b class="money">${money(t.eMonth)}${A(' /ش', ' /mo')}</b></div>
     ${t.eOnce ? `<div class="tline"><span>${A('خدمات خارجية مرة واحدة', 'Outside services one-time')}</span><b class="money">${money(t.eOnce)}</b></div>` : ''}
     ${t.eYear ? `<div class="tline"><span>${A('خدمات خارجية سنويًا', 'Outside services yearly')}</span><b class="money">${money(t.eYear)}${A(' /سنة', ' /yr')}</b></div>` : ''}
-    <div class="tline big"><span>${A('تدفع لي للبناء', 'You pay me to build')}</span><span class="money">${money(t.now)}</span></div>
-    <div class="split">${[40, 40, 20].map((p, i) => `<div><b class="money">${money(t.now * p / 100)}</b>${[A('عند التوقيع', 'On signing'), A('عند التسليم للاختبار', 'At test delivery'), A('عند الإطلاق', 'At launch')][i]}</div>`).join('')}</div>
-    <div class="tline" style="margin-top:10px"><span>${A('شهريًا بعد الإطلاق', 'Monthly after launch')}</span><b class="money">${money(t.monthly)}</b></div>
-    <div class="tline sub"><span>${A('منها لي', 'to me')}: ${money(t.care * t.v)} · ${A('للمزودين', 'to providers')}: ${money(t.eMonth * t.v)}</span></div>
-    <div class="tline"><span>${A('تكلفة السنة الأولى كاملة', 'Full first-year cost')}</span><b class="money">${money(t.firstYear)}</b></div>
     <div class="small muted" style="margin-top:8px">${A('مطوّر مستقل — لا تُضاف ضريبة القيمة المضافة على أتعابي. رسوم المزودين قد تشمل ضريبتهم.', 'Freelance developer — no VAT on my fees. Provider fees may include their own VAT.')}</div></div>
 
-    <div class="card section small muted">${ic('info')} ${A('أسعار الجزء ٣ تقديرية وتُدفع للمزودين مباشرة حسب الاستخدام الفعلي.', 'Part 3 prices are estimates, paid to providers based on actual usage.')}</div></div></div></div></div>`;
+    <div class="card section small muted">${ic('info')} ${A('أسعار الخدمات الخارجية تقديرية وتُدفع للمزودين مباشرة حسب الاستخدام الفعلي.', 'Outside-service prices are estimates, paid to providers based on actual usage.')}</div></div></div></div></div>`;
 }
 function sigPad() {
   const c = $('#sig'); if (!c) return;
