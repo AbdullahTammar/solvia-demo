@@ -72,18 +72,18 @@ window.D = {
   pricing: {
     build: [
       // [ar, en, desc ar, desc en, price]
-      ['تصميم الواجهات والواجهة الأمامية', 'UI/UX design & front-end', 'الموقع العام، تطبيق العميل للجوال والكمبيوتر، بوابة الموظفين والمشرف، عربي/إنجليزي، داكن/فاتح', 'Public site, customer app (mobile + desktop), staff & supervisor portal, AR/EN, dark/light', 18000],
-      ['الواجهة الخلفية وواجهات API', 'Back-end & APIs', 'الدخول برمز OTP، الخدمات، التذاكر، الإسناد، الصلاحيات، الفواتير، التقارير', 'OTP login, services, tickets, assignment, roles, invoices, reports', 24000],
-      ['قاعدة البيانات', 'Database', 'تصميم قاعدة البيانات، الفهارس، النسخ الاحتياطي، نقل البيانات الحالية', 'Schema, indexes, backups, import of existing data', 6000],
-      ['المحادثة والتحديثات الفورية (WebSocket)', 'Real-time chat & live updates (WebSocket)', 'محادثة بين العميل والموظف وتحديث التذاكر لحظيًا', 'Customer ↔ staff chat and live ticket updates', 5000],
-      ['الربط مع الخدمات الخارجية', 'Integrations', 'الرسائل، واتساب، بوابة الدفع، الفوترة الإلكترونية، الاجتماعات الافتراضية', 'SMS, WhatsApp, payment gateway, e-invoicing, video meetings', 9000],
-      ['الأمان والحماية', 'Security', 'تشفير، حماية OWASP، سجل تدقيق، صلاحيات دقيقة، متطلبات نظام حماية البيانات الشخصية', 'Encryption, OWASP hardening, audit log, fine-grained roles, PDPL basics', 6000],
-      ['تجهيز الخادم والإطلاق', 'Server setup & deployment', 'إعداد الخادم في السعودية، SSL، المراقبة، النشر الآلي', 'Saudi server setup, SSL, monitoring, CI/CD', 3000],
-      ['الاختبار والتدريب والإطلاق', 'Testing, training & launch', 'اختبار شامل، تدريب الموظفين، أدلة الاستخدام', 'Full testing, staff training, user guides', 3000],
+      ['تصميم الواجهات والواجهة الأمامية', 'UI/UX design & front-end', 'الموقع العام، تطبيق العميل للجوال والكمبيوتر، بوابة الموظفين والمشرف، عربي/إنجليزي، داكن/فاتح', 'Public site, customer app (mobile + desktop), staff & supervisor portal, AR/EN, dark/light', 7000],
+      ['الواجهة الخلفية وواجهات API', 'Back-end & APIs', 'الدخول برمز OTP، الخدمات، التذاكر، الإسناد، الصلاحيات، الفواتير، التقارير', 'OTP login, services, tickets, assignment, roles, invoices, reports', 10000],
+      ['قاعدة البيانات', 'Database', 'تصميم قاعدة البيانات، الفهارس، النسخ الاحتياطي، نقل البيانات الحالية', 'Schema, indexes, backups, import of existing data', 2500],
+      ['المحادثة والتحديثات الفورية (WebSocket)', 'Real-time chat & live updates (WebSocket)', 'محادثة بين العميل والموظف وتحديث التذاكر لحظيًا', 'Customer ↔ staff chat and live ticket updates', 2000],
+      ['الربط مع الخدمات الخارجية', 'Integrations', 'الرسائل، واتساب، بوابة الدفع، الفوترة الإلكترونية، الاجتماعات الافتراضية', 'SMS, WhatsApp, payment gateway, e-invoicing, video meetings', 3500],
+      ['الأمان والحماية', 'Security', 'تشفير، حماية OWASP، سجل تدقيق، صلاحيات دقيقة، متطلبات نظام حماية البيانات الشخصية', 'Encryption, OWASP hardening, audit log, fine-grained roles, PDPL basics', 2500],
+      ['تجهيز الخادم والإطلاق', 'Server setup & deployment', 'إعداد الخادم في السعودية، SSL، المراقبة، النشر الآلي', 'Saudi server setup, SSL, monitoring, CI/CD', 1500],
+      ['الاختبار والتدريب والإطلاق', 'Testing, training & launch', 'اختبار شامل، تدريب الموظفين، أدلة الاستخدام', 'Full testing, staff training, user guides', 1000],
     ],
     buildOptional: [
-      ['تطبيقات الجوال (iOS و Android)', 'Native mobile apps (iOS & Android)', 'نشر التطبيق في App Store و Google Play', 'Published on the App Store and Google Play', 25000],
-      ['الدخول عبر نفاذ', 'Nafath login', 'التحقق من الهوية الوطنية', 'National ID verification', 6000],
+      ['تطبيقات الجوال (iOS و Android)', 'Native mobile apps (iOS & Android)', 'نشر التطبيق في App Store و Google Play', 'Published on the App Store and Google Play', 10000],
+      ['الدخول عبر نفاذ', 'Nafath login', 'التحقق من الهوية الوطنية', 'National ID verification', 2500],
     ],
     // monthly care plans (my work)
     care: [
@@ -137,6 +137,6 @@ window.D = {
         ['نطاق ‎.com + SSL مجاني', '.com domain + free SSL', 'سنويًا', 'Yearly', 0, 0, 60],
       ]],
     ],
-    terms: { vat: 15, split: ['٤٠٪ عند التوقيع · ٤٠٪ عند التسليم للاختبار · ٢٠٪ عند الإطلاق', '40% on signing · 40% at test delivery · 20% at launch'], weeks: 10, validity: 30 },
+    terms: { vat: 0, split: ['٤٠٪ عند التوقيع · ٤٠٪ عند التسليم للاختبار · ٢٠٪ عند الإطلاق', '40% on signing · 40% at test delivery · 20% at launch'], weeks: 10, validity: 30 },
   },
 };

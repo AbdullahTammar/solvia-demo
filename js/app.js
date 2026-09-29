@@ -598,7 +598,8 @@ C.finance = () => hero(A('المالية', 'Finance'), A('المدفوعات و�
    PRICING (hidden page: #pricing)
    ====================================================== */
 const PX = D.pricing;
-let psel = store.get('psel', { opt: [], care: 1, ext: Object.fromEntries(PX.external.map(e => [e[0], 0])), vat: true });
+let psel = store.get('psel', { opt: [], care: 1, ext: Object.fromEntries(PX.external.map(e => [e[0], 0])) });
+psel.vat = false;   // freelancer: no VAT
 const pricingUnlocked = () => { try { return sessionStorage.getItem('solvia-price') === '1'; } catch (e) { return false; } };
 function pricingTotals() {
   const build = PX.build.reduce((a, x) => a + x[4], 0) + PX.buildOptional.filter((x, i) => psel.opt.includes(i)).reduce((a, x) => a + x[4], 0);
@@ -617,7 +618,7 @@ function pricingPage() {
   return top + `<div class="wrap" style="padding-top:24px;padding-bottom:60px">
   <section class="hero"><div class="eyebrow">${ic('file-signature')}${A('عرض سعر', 'Price proposal')} · SLV-2026-01</div><h1>${A(`تطوير منصة ${BRAND} للخدمات الحكومية`, `Building the ${BRAND} government-services platform`)}</h1>
     <p>${A('ينقسم العرض إلى ثلاثة أجزاء واضحة: (١) بناء المنصة كاملة — الواجهة والخلفية وقاعدة البيانات والأمان والخادم — وأتولاها أنا بالكامل. (٢) الدعم الشهري بعد الإطلاق. (٣) خدمات خارجية يدفعها العميل للمزود مباشرة، وأنا أتولى إعدادها وربطها. اختر ما يناسبك في كل جزء.', 'This proposal has three clear parts: (1) building the whole platform — front end, back end, database, security and server — which I handle fully; (2) monthly support after launch; (3) outside services the client pays to the provider directly, which I set up and connect. Choose what suits you in each part.')}</p>
-    <div class="actions"><span class="badge" style="background:rgba(255,255,255,.1);color:#fff">${ic('calendar')}${A('مدة التنفيذ ', 'Delivery ')}${PX.terms.weeks}${A(' أسابيع', ' weeks')}</span><span class="badge" style="background:rgba(255,255,255,.1);color:#fff">${ic('clock')}${A('صالح ', 'Valid ')}${PX.terms.validity}${A(' يومًا', ' days')}</span><label class="badge" style="background:rgba(255,255,255,.1);color:#fff;cursor:pointer"><input type="checkbox" ${psel.vat ? 'checked' : ''} onchange="App.pset('vat',this.checked)" style="accent-color:var(--accent)">${A('شامل ضريبة ١٥٪', 'Include 15% VAT')}</label></div></section>
+    <div class="actions"><span class="badge" style="background:rgba(255,255,255,.1);color:#fff">${ic('calendar')}${A('مدة التنفيذ ', 'Delivery ')}${PX.terms.weeks}${A(' أسابيع', ' weeks')}</span><span class="badge" style="background:rgba(255,255,255,.1);color:#fff">${ic('clock')}${A('صالح ', 'Valid ')}${PX.terms.validity}${A(' يومًا', ' days')}</span><span class="badge" style="background:rgba(255,255,255,.1);color:#fff">${ic('user-check')}${A('مطوّر مستقل · بدون ضريبة قيمة مضافة', 'Freelance developer · no VAT')}</span></div></section>
 
   <div class="grid g21 section" style="align-items:start"><div>
     <div class="card bucket"><div class="bucket-h"><div class="ic">${ic('code-xml')}</div><div><span class="badge">${A('الجزء ١ · أتولاه أنا', 'Part 1 · handled by me')}</span><h2 style="margin-top:4px">${A('بناء المنصة', 'Building the platform')}</h2></div></div>
@@ -649,7 +650,7 @@ function pricingPage() {
     <div class="tline" style="margin-top:10px"><span>${A('شهريًا بعد الإطلاق', 'Monthly after launch')}</span><b class="money">${money(t.monthly)}</b></div>
     <div class="tline sub"><span>${A('منها لي', 'to me')}: ${money(t.care * t.v)} · ${A('للمزودين', 'to providers')}: ${money(t.eMonth * t.v)}</span></div>
     <div class="tline"><span>${A('تكلفة السنة الأولى كاملة', 'Full first-year cost')}</span><b class="money">${money(t.firstYear)}</b></div>
-    <div class="small muted" style="margin-top:8px">${psel.vat ? A('الأسعار شاملة ضريبة القيمة المضافة ١٥٪', 'Prices include 15% VAT') : A('الأسعار غير شاملة الضريبة', 'Prices exclude VAT')}</div></div>
+    <div class="small muted" style="margin-top:8px">${A('مطوّر مستقل — لا تُضاف ضريبة القيمة المضافة على أتعابي. رسوم المزودين قد تشمل ضريبتهم.', 'Freelance developer — no VAT on my fees. Provider fees may include their own VAT.')}</div></div>
 
     <div class="card section small muted">${ic('info')} ${A('أسعار الجزء ٣ تقديرية وتُدفع للمزودين مباشرة حسب الاستخدام الفعلي.', 'Part 3 prices are estimates, paid to providers based on actual usage.')}</div></div></div></div></div>`;
 }
