@@ -75,14 +75,14 @@ window.D = {
   pricing: {
     build: [
       // [ar, en, desc ar, desc en, price]
-      ['تصميم الواجهات والواجهة الأمامية', 'UI/UX design & front-end', 'الموقع العام، تطبيق العميل للجوال والكمبيوتر، بوابة الموظفين والمشرف، عربي/إنجليزي، داكن/فاتح', 'Public site, customer app (mobile + desktop), staff & supervisor portal, AR/EN, dark/light', 7000],
-      ['الواجهة الخلفية وواجهات API', 'Back-end & APIs', 'الدخول برمز OTP، الخدمات، التذاكر، الإسناد، الصلاحيات، الفواتير، التقارير', 'OTP login, services, tickets, assignment, roles, invoices, reports', 10000],
-      ['قاعدة البيانات', 'Database', 'تصميم قاعدة البيانات، الفهارس، النسخ الاحتياطي، نقل البيانات الحالية', 'Schema, indexes, backups, import of existing data', 2500],
-      ['المحادثة والتحديثات الفورية (WebSocket)', 'Real-time chat & live updates (WebSocket)', 'محادثة بين العميل والموظف وتحديث التذاكر لحظيًا', 'Customer ↔ staff chat and live ticket updates', 2000],
-      ['الربط مع الخدمات الخارجية', 'Integrations', 'الرسائل، واتساب، بوابة الدفع، الفوترة الإلكترونية، الاجتماعات الافتراضية', 'SMS, WhatsApp, payment gateway, e-invoicing, video meetings', 3500],
-      ['الأمان والحماية', 'Security', 'تشفير، حماية OWASP، سجل تدقيق، صلاحيات دقيقة، متطلبات نظام حماية البيانات الشخصية', 'Encryption, OWASP hardening, audit log, fine-grained roles, PDPL basics', 2500],
-      ['تجهيز الخادم والإطلاق', 'Server setup & deployment', 'إعداد الخادم في السعودية، SSL، المراقبة، النشر الآلي', 'Saudi server setup, SSL, monitoring, CI/CD', 1500],
-      ['الاختبار والتدريب والإطلاق', 'Testing, training & launch', 'اختبار شامل، تدريب الموظفين، أدلة الاستخدام', 'Full testing, staff training, user guides', 1000],
+      ['تصميم الواجهات والواجهة الأمامية', 'UI/UX design & front-end', 'الموقع العام، تطبيق العميل للجوال والكمبيوتر، بوابة الموظفين والمشرف، عربي/إنجليزي، داكن/فاتح', 'Public site, customer app (mobile + desktop), staff & supervisor portal, AR/EN, dark/light', 12000],
+      ['الواجهة الخلفية وواجهات API', 'Back-end & APIs', 'الدخول برمز OTP، الخدمات، التذاكر، الإسناد، الصلاحيات، الفواتير، التقارير', 'OTP login, services, tickets, assignment, roles, invoices, reports', 17000],
+      ['قاعدة البيانات', 'Database', 'تصميم قاعدة البيانات، الفهارس، النسخ الاحتياطي، نقل البيانات الحالية', 'Schema, indexes, backups, import of existing data', 4000],
+      ['المحادثة والتحديثات الفورية (WebSocket)', 'Real-time chat & live updates (WebSocket)', 'محادثة بين العميل والموظف وتحديث التذاكر لحظيًا', 'Customer ↔ staff chat and live ticket updates', 3000],
+      ['الربط مع الخدمات الخارجية', 'Integrations', 'الرسائل، واتساب، بوابة الدفع، الفوترة الإلكترونية، الاجتماعات الافتراضية', 'SMS, WhatsApp, payment gateway, e-invoicing, video meetings', 6000],
+      ['الأمان والحماية', 'Security', 'تشفير، حماية OWASP، سجل تدقيق، صلاحيات دقيقة، متطلبات نظام حماية البيانات الشخصية', 'Encryption, OWASP hardening, audit log, fine-grained roles, PDPL basics', 4000],
+      ['تجهيز الخادم والإطلاق', 'Server setup & deployment', 'إعداد الخادم في السعودية، SSL، المراقبة، النشر الآلي', 'Saudi server setup, SSL, monitoring, CI/CD', 2500],
+      ['الاختبار والتدريب والإطلاق', 'Testing, training & launch', 'اختبار شامل، تدريب الموظفين، أدلة الاستخدام', 'Full testing, staff training, user guides', 1500],
     ],
     buildOptional: [
       ['تطبيقات الجوال (iOS و Android)', 'Native mobile apps (iOS & Android)', 'نشر التطبيق في App Store و Google Play', 'Published on the App Store and Google Play', 10000],
