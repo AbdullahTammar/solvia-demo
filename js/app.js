@@ -647,7 +647,7 @@ function pricingPage() {
     <div class="tline"><span>${A('خدمات خارجية شهريًا', 'Outside services monthly')}</span><b class="money">${money(t.eMonth)}${A(' /ش', ' /mo')}</b></div>
     ${t.eOnce ? `<div class="tline"><span>${A('خدمات خارجية مرة واحدة', 'Outside services one-time')}</span><b class="money">${money(t.eOnce)}</b></div>` : ''}
     ${t.eYear ? `<div class="tline"><span>${A('خدمات خارجية سنويًا', 'Outside services yearly')}</span><b class="money">${money(t.eYear)}${A(' /سنة', ' /yr')}</b></div>` : ''}
-    <div class="small muted" style="margin-top:8px">${A('مطوّر مستقل — لا تُضاف ضريبة القيمة المضافة على أتعابي. رسوم المزودين قد تشمل ضريبتهم.', 'Freelance developer — no VAT on my fees. Provider fees may include their own VAT.')}</div></div>
+    </div>
 
     <div class="card section small muted">${ic('info')} ${A('أسعار الخدمات الخارجية تقديرية وتُدفع للمزودين مباشرة حسب الاستخدام الفعلي.', 'Outside-service prices are estimates, paid to providers based on actual usage.')}</div></div></div></div></div>`;
 }
