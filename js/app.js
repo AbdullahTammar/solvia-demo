@@ -140,6 +140,7 @@ function pubNav() {
       ${inFrame ? '' : `<button class="iconbtn hide-m" title="${A('معاينة الجوال', 'Mobile preview')}" onclick="App.phone()">${ic('smartphone')}</button>`}
       <button class="pill" onclick="App.lang()">${en() ? 'العربية' : 'EN'}</button>
       <button class="iconbtn" onclick="App.theme()">${ic(document.documentElement.dataset.theme === 'dark' ? 'sun' : 'moon')}</button>
+      <button class="iconbtn" title="${A('عرض السعر', 'Price proposal')}" onclick="App.go('pricing')">${ic('file-signature')}</button>
       <button class="pill hide-m" onclick="App.staffLogin()">${A('دخول الموظفين', 'Staff sign in')}</button>
       <button class="btn sm" onclick="App.login()">${ic('log-in')}<span class="hide-m">${session ? A('حسابي', 'My account') : A('دخول', 'Sign in')}</span></button>
     </div></nav>`;
