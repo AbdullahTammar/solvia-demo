@@ -635,7 +635,7 @@ function pricingPage() {
   <div class="grid g21 section" style="align-items:start"><div>
     <div class="card bucket"><div class="bucket-h"><div class="ic">${ic('code-xml')}</div><div><span class="badge">${A('أتعابي', 'My fee')}</span><h2 style="margin-top:4px">${A('بناء المنصة', 'Building the platform')}</h2></div></div>
       <p class="muted small">${A('يشمل كل شيء لتشغيل المنصة: الموقع العام، تطبيق العميل، بوابة الموظفين والمشرف، قاعدة البيانات، الأمان، وتجهيز الخادم.', 'Everything to run the platform: public site, customer app, staff & supervisor portal, database, security and server setup.')}</p>
-      ${PX.build.map(x => `<div class="line"><div style="display:flex;gap:10px"><span style="color:var(--ok)">${ic('check')}</span><div><b>${A(x[0], x[1])}</b><div class="d">${A(x[2], x[3])}</div></div></div></div>`).join('')}
+      ${PX.build.map(x => `<div class="line"><div style="display:flex;gap:10px"><span style="color:var(--ok)">${ic('check')}</span><div><b>${A(x[0], x[1])}</b><div class="d">${A(x[2], x[3])}</div></div></div><b class="money">${money(x[4])}</b></div>`).join('')}
       <div class="line" style="background:var(--accent-soft);border-radius:14px;padding:16px;border:0;margin-top:8px;align-items:center"><b style="font-size:16px">${A('أتعاب التطوير (مبلغ ثابت)', 'Development fee (fixed)')}</b><b class="money" style="font-size:24px;color:var(--accent)">${money(PX.build.reduce((a, x) => a + x[4], 0))}</b></div></div>
 
     <div class="card bucket section"><div class="bucket-h"><div class="ic">${ic('server')}</div><div><span class="badge info">${A('إضافي · يدفعها العميل للمزود', 'Extra · paid to providers')}</span><h2 style="margin-top:4px">${A('الخدمات الخارجية', 'Outside services')}</h2></div></div>
