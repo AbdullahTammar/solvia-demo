@@ -351,3 +351,9 @@ tr.click{cursor:pointer}tr.click:hover td{background:var(--surface-2)}
 ::-webkit-scrollbar-thumb:hover{background:var(--sb-thumb-h);background-clip:padding-box;border:2px solid transparent}
 ::-webkit-scrollbar-button,::-webkit-scrollbar-corner{display:none;background:transparent}
 .rail::-webkit-scrollbar,.side::-webkit-scrollbar{width:6px}
+/* payment brand logos */
+.pay-logos{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.pay-ic{height:30px;width:auto;border-radius:6px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.12);display:block}
+.opt .pay-ic{height:26px}
+footer.pub .pay-ic{height:28px}
+.pay-ic[src*="stcpay"],.pay-ic[src*="sadad"]{padding:5px 8px;box-sizing:border-box}

@@ -116,6 +116,9 @@ function svcLogo(s, cls = '') {
   if (plat(s.pl)) return plogo(s.pl, cls);
   return `<div class="plogo ${cls}" style="background:linear-gradient(135deg,var(--accent-soft),var(--surface));color:var(--accent)">${ic(s.icon || 'sparkles')}</div>`;
 }
+const PAY = { mada: 'mada', apple: 'applepay', stc: 'stcpay', visa: 'visa', mc: 'mastercard', sadad: 'sadad' };
+const payImg = k => `<img class="pay-ic" src="img/pay/${PAY[k]}.svg" alt="${k}">`;
+const payLogos = (keys = ['mada', 'apple', 'stc', 'visa', 'mc']) => keys.map(payImg).join('');
 const stat = (i, l, v, s, up = false) => `<div class="card stat"><div class="ic">${ic(i)}</div><div><div class="lbl">${l}</div><div class="val">${v}</div><div class="sub">${up ? ic('trending-up') : ''}${s}</div></div></div>`;
 const hero = (eyebrow, title, sub = '', actions = '') => `<section class="hero"><div class="eyebrow">${eyebrow}</div><h1>${title}</h1>${sub ? `<p>${sub}</p>` : ''}${actions ? `<div class="actions">${actions}</div>` : ''}</section>`;
 const bars = (vals, labels, hi = vals.length - 1) => `<div class="bars">${vals.map((v, i) => `<div class="${i === hi ? 'hi' : ''}" style="height:${v}%" title="${v}"><span>${labels ? labels[i] : ''}</span></div>`).join('')}</div><div style="height:20px"></div>`;
@@ -155,7 +158,7 @@ function pubNav() {
 }
 function pubFooter() {
   return `<footer class="pub"><div class="wrap">
-    <div>${brand(true)}<p style="margin-top:12px">${A('خدمات حكومية. أبسط. أسرع.', 'Government services. Simpler. Faster.')}</p><div class="pay-logos" style="margin-top:12px">${['mada', 'Apple Pay', 'STC Pay', 'VISA', 'Mastercard'].map(x => `<span style="color:var(--text)">${x}</span>`).join('')}</div></div>
+    <div>${brand(true)}<p style="margin-top:12px">${A('خدمات حكومية. أبسط. أسرع.', 'Government services. Simpler. Faster.')}</p><div class="pay-logos" style="margin-top:12px">${payLogos()}</div></div>
     <div><h4>${A('الخدمات', 'Services')}</h4>${services.filter(s => s.on).slice(0, 5).map(s => `<a onclick="App.go('service/${s.id}')">${nm(s)}</a>`).join('')}</div>
     <div><h4>${BRAND}</h4><a href="#how">${A('كيف نعمل', 'How it works')}</a><a href="#business">${A('للشركات', 'For business')}</a><a href="#faq">${A('الأسئلة الشائعة', 'FAQ')}</a></div>
     <div><h4>${A('فريق العمل', 'Team')}</h4><a onclick="App.staffLogin()">${A('دخول الموظفين', 'Staff sign in')}</a><a>${A('الرياض، المملكة العربية السعودية', 'Riyadh, Saudi Arabia')}</a><a dir="ltr">+966 9200 00000</a></div>
@@ -253,7 +256,7 @@ function servicePage() {
       <div class="prop"><span>${A('المتابعة', 'Follow-up')}</span><b>+${money(D.followUpFee)}</b></div>
       ${p ? `<div class="prop"><span>${A('المنصة', 'Platform')}</span><span style="display:flex;gap:8px;align-items:center">${plogo(p.id, 'sm')}<b>${nm(p)}</b></span></div>` : ''}
       <button class="btn lg block" style="margin-top:16px" onclick="App.start('${s.id}')">${ic('plus')}${A('اطلب الخدمة الآن', 'Request now')}</button>
-      <div class="pay-logos" style="margin-top:14px;justify-content:center">${['mada', 'Apple Pay', 'STC Pay', 'VISA'].map(x => `<span>${x}</span>`).join('')}</div></div></div></div>
+      <div class="pay-logos" style="margin-top:14px;justify-content:center">${payLogos()}</div></div></div></div>
     <h2 style="margin:40px 0 16px">${A('خدمات أخرى', 'Other services')}</h2><div class="grid g3">${related.map(svcCard).join('')}</div></div>${pubFooter()}`;
 }
 
@@ -362,7 +365,7 @@ C.new = () => {
       <label class="small" style="display:flex;gap:8px;margin-top:14px"><input type="checkbox" checked style="accent-color:var(--accent)">${A('أرسل لي التحديثات عبر واتساب والرسائل النصية', 'Send me updates on WhatsApp and SMS')}</label>
       <div style="display:flex;justify-content:space-between;margin-top:20px"><button class="btn ghost" onclick="App.wiz('step',1)">${A('رجوع', 'Back')}</button><button class="btn" onclick="App.wiz('step',3)">${A('التالي: الدفع', 'Next: payment')}${fwd()}</button></div></div>`;
   if (wiz.step === 3) body = `<div class="card"><h2 style="margin-bottom:6px">${A('الدفع الإلكتروني', 'Online payment')}</h2><div class="small muted" style="margin-bottom:12px">${ic('lock')} ${A('دفع آمن ومشفّر', 'Secure, encrypted payment')}</div>
-      ${[['mada', 'mada', 'مدى', 'credit-card'], ['apple', 'Apple Pay', 'Apple Pay', 'smartphone'], ['stc', 'STC Pay', 'STC Pay', 'wallet'], ['card', 'Visa / Mastercard', 'فيزا / ماستركارد', 'credit-card'], ['sadad', 'SADAD', 'سداد', 'landmark']].map(([k, e, a, i]) => `<label class="opt ${wiz.pay === k ? 'on' : ''}" onclick="App.wiz('pay','${k}')"><input type="radio" ${wiz.pay === k ? 'checked' : ''}><div class="ic" style="width:34px;height:34px">${ic(i)}</div><div class="grow" style="align-self:center"><b>${A(a, e)}</b></div></label>`).join('')}
+      ${[['mada', 'mada', 'مدى', 'credit-card'], ['apple', 'Apple Pay', 'Apple Pay', 'smartphone'], ['stc', 'STC Pay', 'STC Pay', 'wallet'], ['card', 'Visa / Mastercard', 'فيزا / ماستركارد', 'credit-card'], ['sadad', 'SADAD', 'سداد', 'landmark']].map(([k, e, a, i]) => `<label class="opt ${wiz.pay === k ? 'on' : ''}" onclick="App.wiz('pay','${k}')"><input type="radio" ${wiz.pay === k ? 'checked' : ''}><div class="grow" style="align-self:center"><b>${A(a, e)}</b></div><span style="display:flex;gap:6px">${({ mada: ['mada'], apple: ['apple'], stc: ['stc'], card: ['visa', 'mc'], sadad: ['sadad'] })[k].map(payImg).join('')}</span></label>`).join('')}
       ${wiz.pay === 'mada' || wiz.pay === 'card' ? `<div class="grid g2" style="margin-top:14px"><label class="field" style="grid-column:1/-1">${A('رقم البطاقة', 'Card number')}<input class="input" dir="ltr" value="4847 •••• •••• 2231"></label><label class="field">${A('الانتهاء', 'Expiry')}<input class="input" dir="ltr" value="09/29"></label><label class="field">CVV<input class="input" dir="ltr" value="•••"></label></div>` : ''}
       <div style="display:flex;justify-content:space-between;margin-top:20px;gap:10px;flex-wrap:wrap"><button class="btn ghost" onclick="App.wiz('step',2)">${A('رجوع', 'Back')}</button><button class="btn lg" onclick="App.pay()">${ic('lock')}${A('ادفع ', 'Pay ')}${money(total + vat)}</button></div></div>`;
   if (wiz.step === 4) {
