@@ -629,14 +629,14 @@ function pricingPage() {
   const freqTxt = o => o[5] ? money(o[5]) + A(' / شهريًا', ' / month') : o[6] ? money(o[6]) + A(' / سنويًا', ' / year') : o[4] ? money(o[4]) + A(' مرة واحدة', ' one-time') : A('بدون رسوم ثابتة', 'No fixed fee');
   return top + `<div class="wrap" style="padding-top:24px;padding-bottom:60px">
   <section class="hero"><div class="eyebrow">${ic('file-signature')}${A('عرض سعر', 'Price proposal')} · SLV-2026-01</div><h1>${A(`تطوير منصة ${BRAND} للخدمات الحكومية`, `Building the ${BRAND} government-services platform`)}</h1>
-    <p>${A('العرض من جزأين: (١) أتعاب التطوير — بناء المنصة كاملة (الواجهات، الخلفية، قاعدة البيانات، الأمان، تجهيز الخادم والإطلاق) بمبلغ ثابت. (٢) خدمات خارجية إضافية يدفعها العميل للمزود مباشرة، وأنا أتولى إعدادها وربطها.', 'Two parts: (1) the development fee — building the whole platform (interfaces, back end, database, security, server setup and launch) for one fixed amount; (2) extra outside services the client pays to providers directly, which I set up and connect.')}</p>
+    <p>${A('العرض من جزأين: (١) تكلفة التطوير — بناء المنصة كاملة (الواجهات، الخلفية، قاعدة البيانات، الأمان، تجهيز الخادم والإطلاق) بمبلغ ثابت. (٢) خدمات خارجية إضافية يدفعها العميل للمزود مباشرة، وأنا أتولى إعدادها وربطها.', 'Two parts: (1) the development fee — building the whole platform (interfaces, back end, database, security, server setup and launch) for one fixed amount; (2) extra outside services the client pays to providers directly, which I set up and connect.')}</p>
     <div class="actions"><span class="badge" style="background:rgba(255,255,255,.1);color:#fff">${ic('calendar')}${A('مدة التنفيذ: شهران (٨ أسابيع)', 'Delivery: 2 months (8 weeks)')}</span><span class="badge" style="background:rgba(255,255,255,.1);color:#fff">${ic('clock')}${A('صالح ', 'Valid ')}${PX.terms.validity}${A(' يومًا', ' days')}</span></div></section>
 
   <div class="grid g21 section" style="align-items:start"><div>
-    <div class="card bucket"><div class="bucket-h"><div class="ic">${ic('code-xml')}</div><div><span class="badge">${A('أتعابي', 'My fee')}</span><h2 style="margin-top:4px">${A('بناء المنصة', 'Building the platform')}</h2></div></div>
+    <div class="card bucket"><div class="bucket-h"><div class="ic">${ic('code-xml')}</div><div><span class="badge">${A('تكلفة التطوير', 'My fee')}</span><h2 style="margin-top:4px">${A('بناء المنصة', 'Building the platform')}</h2></div></div>
       <p class="muted small">${A('يشمل كل شيء لتشغيل المنصة: الموقع العام، تطبيق العميل، بوابة الموظفين والمشرف، قاعدة البيانات، الأمان، وتجهيز الخادم.', 'Everything to run the platform: public site, customer app, staff & supervisor portal, database, security and server setup.')}</p>
       ${PX.build.map(x => `<div class="line"><div style="display:flex;gap:10px"><span style="color:var(--ok)">${ic('check')}</span><div><b>${A(x[0], x[1])}</b><div class="d">${A(x[2], x[3])}</div></div></div><b class="money">${money(x[4])}</b></div>`).join('')}
-      <div class="line" style="background:var(--accent-soft);border-radius:14px;padding:16px;border:0;margin-top:8px;align-items:center"><b style="font-size:16px">${A('أتعاب التطوير (مبلغ ثابت)', 'Development fee (fixed)')}</b><b class="money" style="font-size:24px;color:var(--accent)">${money(PX.build.reduce((a, x) => a + x[4], 0))}</b></div></div>
+      <div class="line" style="background:var(--accent-soft);border-radius:14px;padding:16px;border:0;margin-top:8px;align-items:center"><b style="font-size:16px">${A('تكلفة التطوير (مبلغ ثابت)', 'Development fee (fixed)')}</b><b class="money" style="font-size:24px;color:var(--accent)">${money(PX.build.reduce((a, x) => a + x[4], 0))}</b></div></div>
 
     <div class="card bucket section"><div class="bucket-h"><div class="ic">${ic('server')}</div><div><span class="badge info">${A('إضافي · يدفعها العميل للمزود', 'Extra · paid to providers')}</span><h2 style="margin-top:4px">${A('الخدمات الخارجية', 'Outside services')}</h2></div></div>
       <p class="muted small">${A('تكاليف تشغيل تُدفع للشركات المزودة مباشرة (أسعار تقريبية وتتغير حسب الاستخدام). أنا أتولى إعدادها وربطها ضمن البناء.', 'Running costs paid directly to providers (estimates; they vary with usage). I set them up and connect them as part of the build.')}</p>
@@ -645,7 +645,7 @@ function pricingPage() {
   </div>
 
   <div class="sumbox"><div class="card"><div class="eyebrow">${A('الملخص', 'Summary')}</div>
-    <div class="tline big"><span>${A('أتعاب التطوير', 'Development fee')}</span><span class="money">${money(t.now)}</span></div>
+    <div class="tline big"><span>${A('تكلفة التطوير', 'Development fee')}</span><span class="money">${money(t.now)}</span></div>
     <div class="small muted" style="margin:16px 0 4px;font-weight:700">${A('إضافي — يُدفع للمزودين مباشرة', 'Extra — paid to providers directly')}</div>
     <div class="tline"><span>${A('خدمات خارجية شهريًا', 'Outside services monthly')}</span><b class="money">${money(t.eMonth)}${A(' /ش', ' /mo')}</b></div>
     ${t.eOnce ? `<div class="tline"><span>${A('خدمات خارجية مرة واحدة', 'Outside services one-time')}</span><b class="money">${money(t.eOnce)}</b></div>` : ''}
