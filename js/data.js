@@ -72,6 +72,55 @@ window.D = {
 
   /* ---------------- Pricing page (hidden, password) ----------------
      All prices in SAR, excluding VAT. Change them here.            */
+
+  /* ---------------- Payments & support page (#pricing/terms) ---------------- */
+  terms2: {
+    // [ar, en, when ar, when en, percent of the development cost]
+    payments: [
+      ['توقيع العقد وبدء العمل', 'Contract signing & kick-off', 'عند التوقيع', 'On signing', 40],
+      ['تسليم التصاميم وبوابة العميل', 'Designs & customer portal delivered', 'نهاية الأسبوع الرابع', 'End of week 4', 30],
+      ['تسليم النسخة التجريبية للاختبار', 'Test version delivered', 'الأسبوع السابع', 'Week 7', 20],
+      ['الإطلاق على الخادم', 'Launch on the server', 'الأسبوع الثامن', 'Week 8', 10],
+    ],
+    payNote: ['الدفع بالتحويل البنكي، وتصدر فاتورة لكل دفعة. تبدأ كل مرحلة بعد استلام دفعتها.', 'Paid by bank transfer with an invoice for each payment. Each phase starts after its payment is received.'],
+    freeMonths: 6,
+    free: [
+      ['إصلاح أي خلل أو عطل في الخصائص المتفق عليها', 'Fixing any bug in the agreed features'],
+      ['التحديثات الأمنية وتحديث المكتبات', 'Security and library updates'],
+      ['مراقبة الخادم والنسخ الاحتياطي اليومي', 'Server monitoring and daily backups'],
+      ['دعم فني عبر واتساب أو التذاكر (الأحد–الخميس ٩ص–٥م)', 'Support via WhatsApp or tickets (Sun–Thu 9am–5pm)'],
+      ['تعديلات بسيطة على النصوص والأسعار', 'Small text and price edits'],
+      ['جلسة تدريب إضافية للموظفين', 'One extra staff training session'],
+    ],
+    paid: [
+      ['إضافة صفحات أو خصائص جديدة', 'New pages or features'],
+      ['تغيير التصميم أو مسار العمل بعد اعتماده', 'Changing approved design or workflows'],
+      ['الربط مع جهات أو أنظمة جديدة', 'Integrations with new systems'],
+      ['إدخال البيانات أو نقلها يدويًا', 'Manual data entry or migration'],
+      ['تكاليف الخادم والخدمات الخارجية (تُدفع للمزود)', 'Server and outside-service costs (paid to providers)'],
+    ],
+    // [ar, en, example, response, badge]
+    sla: [
+      ['حرج', 'Critical', ['المنصة متوقفة أو الدفع لا يعمل', 'Platform down or payments failing'], ['خلال ٤ ساعات', 'Within 4 hours'], 'bad'],
+      ['عالي', 'High', ['ميزة رئيسية لا تعمل', 'A main feature is broken'], ['خلال يوم عمل', 'Within 1 business day'], 'warn'],
+      ['عادي', 'Normal', ['خطأ بسيط أو مشكلة في العرض', 'Minor bug or display issue'], ['خلال ٣ أيام عمل', 'Within 3 business days'], 'info'],
+    ],
+    hourly: 250,
+    // [ar, en, price, features]
+    plans: [
+      ['أساسي', 'Basic', 1500, [['إصلاح الأعطال', 'Bug fixes'], ['التحديثات الأمنية', 'Security updates'], ['مراقبة الخادم', 'Server monitoring']]],
+      ['قياسي', 'Standard', 2500, [['كل ما في الأساسي', 'Everything in Basic'], ['٨ ساعات تطوير شهريًا', '8 dev hours / month'], ['استجابة أسرع', 'Faster response']]],
+      ['حسب الطلب', 'Pay as you go', 0, [['بدون اشتراك شهري', 'No monthly plan'], ['تُحسب الساعات المنفذة فقط', 'Pay only for hours used'], ['تقدير قبل البدء', 'Estimate before work starts']]],
+    ],
+    // [ar, en, examples, price, time]
+    newReq: [
+      ['صغير', 'Small', ['تعديل نص أو حقل أو لون، إضافة خدمة', 'Text, field or colour change; adding a service'], ['٣٠٠ – ٨٠٠ ر.س', '300 – 800 SAR'], ['١–٢ يوم', '1–2 days']],
+      ['متوسط', 'Medium', ['صفحة جديدة، تقرير جديد، تعديل مسار التذاكر', 'New page, new report, ticket workflow change'], ['١٬٥٠٠ – ٤٬٠٠٠ ر.س', '1,500 – 4,000 SAR'], ['٣–٧ أيام', '3–7 days']],
+      ['كبير', 'Large', ['وحدة كاملة، ربط مع جهة جديدة، تطبيق جوال', 'Full module, new integration, mobile app'], ['يبدأ من ٥٬٠٠٠ ر.س (عرض سعر)', 'From 5,000 SAR (quoted)'], ['حسب النطاق', 'Depends on scope']],
+    ],
+    process: [['إرسال الطلب', 'Send the request'], ['تقدير السعر والمدة خلال يومي عمل', 'Estimate within 2 business days'], ['الموافقة ودفع ٥٠٪', 'Approve & pay 50%'], ['التنفيذ والاختبار', 'Build & test'], ['النشر ودفع الباقي', 'Release & pay the rest']],
+  },
+
   pricing: {
     build: [
       // [ar, en, desc ar, desc en, price]

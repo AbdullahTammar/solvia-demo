@@ -28,6 +28,15 @@ let platforms = store.get('platforms', D.platforms.map(p => ({ id: p[0], ar: p[1
 let services = store.get('services', D.services.map(s => ({ id: s[0], pl: s[1], ar: s[2], en: s[3], dar: s[4], den: s[5], price: s[6], aud: s[7], days: s[8], icon: s[9], logo: '', on: true })));
 let tickets = store.get('tickets', D.tickets);
 let msgs = store.get('msgs', {});
+const HOUR = 3600e3;
+tickets.forEach(t => { if (!t.at) t.at = Date.now() - t.age * HOUR; });
+let ratings = store.get('ratings', {
+  'REQ-10418': { score: 5, text: 'خدمة ممتازة وسريعة، شكرًا خالد', at: Date.now() - 3 * HOUR },
+  'REQ-10412': { score: 4, text: 'الاستشارة كانت واضحة ومفيدة', at: Date.now() - 2 * HOUR },
+});
+let complaints = store.get('complaints', [
+  { id: 'CMP-201', tk: 'REQ-10422', cust: 'C4', emp: 'NS', cat: 'delay', text: 'الطلب تأخر عن الموعد المحدد ولم يصلني تحديث.', st: 'review', at: Date.now() - 5 * HOUR },
+]);
 let meetings = store.get('meetings', [
   { id: 'M1', tk: 'REQ-10429', cust: 'C1', emp: 'AO', ar: 'متابعة عقود العمل في قوى', en: 'Qiwa contracts follow-up', when: '30/09 · 4:30 PM' },
   { id: 'M2', tk: 'REQ-10420', cust: 'C4', emp: 'KH', ar: 'اجتماع الموارد البشرية الشهري', en: 'Monthly HR review', when: '01/10 · 11:00 AM' },
@@ -35,7 +44,7 @@ let meetings = store.get('meetings', [
 let session = store.get('session', null);   // null | customer | employee | supervisor
 let ctype = store.get('ctype', 'ind');       // customer account: ind (individual) | biz (company)
 const cid = () => ctype === 'biz' ? 'C2' : 'C1';
-const save = () => { store.set('platforms', platforms); store.set('services', services); store.set('tickets', tickets); store.set('msgs', msgs); store.set('meetings', meetings); };
+const save = () => { store.set('platforms', platforms); store.set('services', services); store.set('tickets', tickets); store.set('msgs', msgs); store.set('meetings', meetings); store.set('ratings', ratings); store.set('complaints', complaints); };
 const ME = { customer: 'C1', employee: 'AO', supervisor: 'RH' };
 const svc = id => services.find(s => s.id === id) || services[0];
 const plat = id => platforms.find(p => p.id === id);
@@ -66,7 +75,7 @@ function seedMsgs(t) {
 let R = { view: 'public' };
 function parse() {
   const h = decodeURIComponent(location.hash.slice(1));
-  if (h.startsWith('pricing')) return { view: 'pricing' };
+  if (h.startsWith('pricing')) return { view: 'pricing', sub: h.split('/')[1] || '' };
   if (h.startsWith('service/')) return { view: 'service', id: h.split('/')[1] };
   if (/^(customer|employee|supervisor)\//.test(h)) { const [role, page, id] = h.split('/'); return { view: 'app', role, page, id }; }
   if (h.startsWith('app/')) { const [, role, page, id] = h.split('/'); return { view: 'app', role, page, id }; }
@@ -119,6 +128,11 @@ function svcLogo(s, cls = '') {
 const PAY = { mada: 'mada', apple: 'applepay', stc: 'stcpay', visa: 'visa', mc: 'mastercard', sadad: 'sadad' };
 const payImg = k => `<img class="pay-ic" src="img/pay/${PAY[k]}.svg" alt="${k}">`;
 const payLogos = (keys = ['mada', 'apple', 'stc', 'visa', 'mc']) => keys.map(payImg).join('');
+const fmtD = ts => new Date(ts).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
+const fmtT = ts => new Date(ts).toLocaleTimeString(en() ? 'en-US' : 'ar-SA-u-nu-latn', { hour: 'numeric', minute: '2-digit' });
+const stars = (n, size = 14) => `<span class="stars" style="font-size:${size}px">${[1, 2, 3, 4, 5].map(i => `<span class="${i <= n ? 'on' : ''}">★</span>`).join('')}</span>`;
+const CMP = { delay: ['تأخير في التنفيذ', 'Delay'], behaviour: ['أسلوب التعامل', 'Staff behaviour'], error: ['خطأ في التنفيذ', 'Wrong result'], other: ['أخرى', 'Other'] };
+const CST = { new: ['جديدة', 'New', 'info'], review: ['قيد المراجعة', 'Under review', 'warn'], closed: ['تم الحل', 'Resolved', 'ok'] };
 const stat = (i, l, v, s, up = false) => `<div class="card stat"><div class="ic">${ic(i)}</div><div><div class="lbl">${l}</div><div class="val">${v}</div><div class="sub">${up ? ic('trending-up') : ''}${s}</div></div></div>`;
 const hero = (eyebrow, title, sub = '', actions = '') => `<section class="hero"><div class="eyebrow">${eyebrow}</div><h1>${title}</h1>${sub ? `<p>${sub}</p>` : ''}${actions ? `<div class="actions">${actions}</div>` : ''}</section>`;
 const bars = (vals, labels, hi = vals.length - 1) => `<div class="bars">${vals.map((v, i) => `<div class="${i === hi ? 'hi' : ''}" style="height:${v}%" title="${v}"><span>${labels ? labels[i] : ''}</span></div>`).join('')}</div><div style="height:20px"></div>`;
@@ -267,7 +281,7 @@ const MENUS = {
   customer: [['home', 'house', 'الرئيسية', 'Home'], ['services', 'layout-grid', 'الخدمات', 'Services'], ['requests', 'ticket', 'طلباتي', 'My requests'], ['meetings', 'video', 'الاجتماعات', 'Meetings'], ['invoices', 'receipt', 'الفواتير', 'Invoices'], ['forms', 'file-down', 'النماذج', 'Forms']],
   company: [['home', 'layout-dashboard', 'لوحة المنشأة', 'Company home'], ['services', 'layout-grid', 'الخدمات', 'Services'], ['requests', 'ticket', 'طلبات المنشأة', 'Company requests'], ['employees', 'users', 'الموظفون', 'Employees'], ['plan', 'gem', 'الاشتراك', 'Subscription'], ['meetings', 'video', 'الاجتماعات', 'Meetings'], ['invoices', 'receipt', 'الفواتير', 'Invoices'], ['forms', 'file-down', 'النماذج', 'Forms']],
   employee: [['desk', 'kanban', 'التذاكر', 'Tickets'], ['meetings', 'video', 'الاجتماعات', 'Meetings'], ['customers', 'contact', 'العملاء', 'Customers'], ['platforms', 'globe', 'المنصات الحكومية', 'Gov platforms'], ['forms', 'file-down', 'النماذج', 'Forms']],
-  supervisor: [['overview', 'layout-dashboard', 'نظرة عامة', 'Overview'], ['desk', 'kanban', 'التذاكر', 'Tickets'], ['catalog', 'tags', 'الخدمات والأسعار', 'Services & prices'], ['team', 'users', 'الفريق والصلاحيات', 'Team & roles'], ['reports', 'chart-column', 'التقارير', 'Reports'], ['finance', 'wallet', 'المالية والفواتير', 'Finance & invoices'], ['meetings', 'video', 'الاجتماعات', 'Meetings'], ['customers', 'contact', 'العملاء', 'Customers'], ['platforms', 'globe', 'المنصات الحكومية', 'Gov platforms']],
+  supervisor: [['overview', 'layout-dashboard', 'نظرة عامة', 'Overview'], ['desk', 'kanban', 'التذاكر', 'Tickets'], ['catalog', 'tags', 'الخدمات والأسعار', 'Services & prices'], ['team', 'users', 'الفريق والصلاحيات', 'Team & roles'], ['staffreport', 'user-round-search', 'تقرير الموظفين', 'Staff report'], ['quality', 'star', 'التقييمات والشكاوى', 'Ratings & complaints'], ['reports', 'chart-column', 'التقارير', 'Reports'], ['finance', 'wallet', 'المالية والفواتير', 'Finance & invoices'], ['meetings', 'video', 'الاجتماعات', 'Meetings'], ['customers', 'contact', 'العملاء', 'Customers'], ['platforms', 'globe', 'المنصات الحكومية', 'Gov platforms']],
 };
 const ROLE_N = { customer: ['عميل', 'Customer'], employee: ['موظف', 'Employee'], supervisor: ['مشرف', 'Supervisor'] };
 const menuOf = r => MENUS[r === 'customer' && ctype === 'biz' ? 'company' : r];
@@ -327,7 +341,7 @@ C.home = () => {
 function reqCard(t) {
   const s = svc(t.svc);
   return `<div class="card hov" style="cursor:pointer" onclick="App.go('${link('request', t.id)}')"><div style="display:flex;gap:12px;align-items:center">${svcLogo(s)}<div style="flex:1;min-width:0"><div style="font-weight:700">${nm(s)}</div><div class="small muted">#${t.id} · ${platName(s)}</div></div>${stB(t.st)}</div>${journey(t.st)}
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><span class="small muted">${A('المختص: ', 'Specialist: ')}${staffName(t.emp)}</span>${typeB(t)}</div></div>`;
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><span class="small muted">${A('المختص: ', 'Specialist: ')}${staffName(t.emp)} · ${fmtD(t.at)} ${fmtT(t.at)}</span>${typeB(t)}</div></div>`;
 }
 let svcQ = '';
 C.services = () => {
@@ -378,6 +392,18 @@ C.new = () => {
 };
 C.requests = () => hero(A('طلباتي', 'My requests'), A('تابع طلباتك خطوة بخطوة', 'Track each request step by step'), '', `<button class="btn" onclick="App.go('${link('services')}')">${ic('plus')}${A('طلب جديد', 'New request')}</button>`) +
   `<div class="grid g2 section">${tickets.filter(t => t.cust === cid()).map(reqCard).join('')}</div>`;
+function rateCard(t) {
+  const r = ratings[t.id], cmp = complaints.filter(c => c.tk === t.id);
+  const who = t.emp ? staffName(t.emp) : A('فريق العمل', 'the team');
+  return `<div class="card section"><h2 style="font-size:17px;margin-bottom:4px">${A('التقييم والشكاوى', 'Rating & complaints')}</h2><div class="small muted" style="margin-bottom:10px">${A('المسؤول عن طلبك: ', 'Handled by: ')}<b>${who}</b></div>
+    ${r ? `<div>${stars(r.score, 20)}</div><p style="margin:6px 0 0">${esc(r.text) || ''}</p><div class="small muted">${fmtD(r.at)}</div>`
+      : t.st === 'done' ? `<div class="stars input" id="rateStars">${[1, 2, 3, 4, 5].map(i => `<span onclick="App.pickStar(${i})">★</span>`).join('')}</div>
+        <textarea class="input" id="rateText" rows="2" style="margin-top:8px" placeholder="${A('اكتب رأيك في الخدمة والمختص…', 'Tell us about the service and specialist…')}"></textarea>
+        <button class="btn sm block" style="margin-top:8px" onclick="App.rate('${t.id}')">${ic('star')}${A('إرسال التقييم', 'Submit rating')}</button>`
+      : `<p class="small muted" style="margin:0">${A('يمكنك تقييم المختص بعد اكتمال الطلب.', 'You can rate the specialist once the request is completed.')}</p>`}
+    ${cmp.map(c => `<div class="attach" style="margin-top:10px"><span style="flex:1">${ic('message-square-warning')} ${A(CMP[c.cat][0], CMP[c.cat][1])} · #${c.id}</span><span class="badge ${CST[c.st][2]}">${A(CST[c.st][0], CST[c.st][1])}</span></div>`).join('')}
+    <button class="btn sm ghost block" style="margin-top:10px" onclick="App.complain('${t.id}')">${ic('message-square-warning')}${A('تقديم شكوى', 'File a complaint')}</button></div>`;
+}
 C.request = () => {
   const t = tickets.find(x => x.id === R.id); if (!t) return C.requests();
   const s = svc(t.svc), m = meetings.find(x => x.tk === t.id), thread = seedMsgs(t).filter(x => x.w !== 'note');
@@ -391,7 +417,9 @@ C.request = () => {
     <div class="card"><h2 style="font-size:17px;margin-bottom:8px">${A('تفاصيل الطلب', 'Details')}</h2>
       <div class="prop"><span>${A('الجهة', 'Platform')}</span><b>${platName(s)}</b></div><div class="prop"><span>${A('المختص', 'Specialist')}</span><b>${staffName(t.emp)}</b></div>
       <div class="prop"><span>${A('المهلة', 'SLA')}</span>${slaB(t)}</div><div class="prop"><span>${A('المدفوع', 'Paid')}</span><b>${money(t.paid)}</b></div>
+      <div class="prop"><span>${A('تاريخ الطلب', 'Requested')}</span><b class="money">${fmtD(t.at)} · ${fmtT(t.at)}</b></div>
       <button class="btn ghost block" style="margin-top:12px" onclick="App.go('${link('invoice', t.id)}')">${ic('receipt')}${A('عرض الفاتورة', 'View invoice')}</button></div>
+    ${rateCard(t)}
     <div class="card section"><h2 style="font-size:17px;margin-bottom:8px">${A('الاجتماع الافتراضي', 'Video meeting')}</h2>
       ${m ? `<div class="row"><div class="ic">${ic('video')}</div><div class="grow"><div class="t">${nm(m)}</div><div class="s">${m.when}</div></div></div><button class="btn block" onclick="App.go('${link('room', m.id)}')">${ic('video')}${A('انضم للاجتماع', 'Join meeting')}</button>`
         : `<p class="muted small">${A('تحتاج تتكلم مع المختص؟ احجز مكالمة فيديو.', 'Want to talk? Book a video call.')}</p><button class="btn ghost block" onclick="App.schedule('${t.id}')">${ic('calendar-plus')}${A('احجز اجتماعًا', 'Book a meeting')}</button>`}</div>
@@ -497,12 +525,12 @@ C.desk = () => {
     <label class="search" style="max-width:260px">${ic('search')}<input value="${esc(desk.q)}" placeholder="${A('بحث', 'Search')}" oninput="App.deskQ(this.value)"></label><div class="sp"></div>
     <div class="tabs">${[['board', 'kanban', 'لوحة', 'Board'], ['list', 'list', 'قائمة', 'List']].map(([k, i, a, e]) => `<button class="${desk.view === k ? 'active' : ''}" onclick="App.desk('view','${k}')">${ic(i)}${A(a, e)}</button>`).join('')}</div></div>
   ${desk.view === 'board' ? `<div class="kanban">${Object.keys(ST).map(c => `<div class="col" data-col="${c}"><h3>${stB(c)}<span class="muted">${f.filter(t => t.st === c).length}</span></h3>${f.filter(t => t.st === c).map(tkCard).join('')}</div>`).join('')}</div>`
-  : `<div class="card tbl"><table><tr><th>#</th><th>${A('الخدمة', 'Service')}</th><th>${A('العميل', 'Customer')}</th><th>${A('النوع', 'Type')}</th><th>${A('المسؤول', 'Assignee')}</th><th>${A('الأولوية', 'Priority')}</th><th>${A('الحالة', 'Status')}</th><th>SLA</th></tr>
-    ${f.map(t => `<tr class="click" onclick="App.go('${link('ticket', t.id)}')"><td class="muted">${t.id}</td><td><div style="display:flex;gap:8px;align-items:center">${svcLogo(svc(t.svc), 'sm')}${nm(svc(t.svc))}</div></td><td>${custName(t.cust)}</td><td>${typeB(t)}</td><td>${staffName(t.emp)}</td><td>${prB(t.p)}</td><td>${stB(t.st)}</td><td>${slaB(t)}</td></tr>`).join('')}</table></div>`}`;
+  : `<div class="card tbl"><table><tr><th>#</th><th>${A('الخدمة', 'Service')}</th><th>${A('العميل', 'Customer')}</th><th>${A('النوع', 'Type')}</th><th>${A('المسؤول', 'Assignee')}</th><th>${A('الأولوية', 'Priority')}</th><th>${A('الحالة', 'Status')}</th><th>SLA</th><th>${A('التاريخ', 'Date')}</th><th>${A('الوقت', 'Time')}</th></tr>
+    ${f.map(t => `<tr class="click" onclick="App.go('${link('ticket', t.id)}')"><td class="muted">${t.id}</td><td><div style="display:flex;gap:8px;align-items:center">${svcLogo(svc(t.svc), 'sm')}${nm(svc(t.svc))}</div></td><td>${custName(t.cust)}</td><td>${typeB(t)}</td><td>${staffName(t.emp)}</td><td>${prB(t.p)}</td><td>${stB(t.st)}</td><td>${slaB(t)}</td><td class="money">${fmtD(t.at)}</td><td class="money muted">${fmtT(t.at)}</td></tr>`).join('')}</table></div>`}`;
 };
 function tkCard(t) {
   const pct = Math.min(100, t.age / slaOf(t) * 100), s = svc(t.svc);
-  return `<div class="tk" draggable="true" data-id="${t.id}" onclick="App.go('${link('ticket', t.id)}')"><div style="display:flex;justify-content:space-between;align-items:center"><span class="id">#${t.id}</span>${prB(t.p)}</div>
+  return `<div class="tk" draggable="true" data-id="${t.id}" onclick="App.go('${link('ticket', t.id)}')"><div style="display:flex;justify-content:space-between;align-items:center"><span class="id">#${t.id}</span>${prB(t.p)}</div><div class="small muted" style="margin-top:4px">${ic('calendar')} ${fmtD(t.at)} · ${fmtT(t.at)}</div>
     <div style="display:flex;gap:8px;align-items:center;margin:8px 0">${svcLogo(s, 'sm')}<div class="ti" style="margin:0">${nm(s)}</div></div>
     <div class="meta">${ic(CH[t.ch][0])}<span>${custName(t.cust)}</span>${t.type === 'f' ? ic('radar') : ''}<span class="avatar sm" title="${staffName(t.emp)}">${t.emp || '—'}</span></div>
     ${t.st !== 'done' ? `<div class="sla"><i class="${pct >= 100 ? 'bad' : pct > 70 ? 'warn' : ''}" style="width:${pct}%"></i></div><div style="margin-top:8px">${slaB(t)}</div>` : ''}</div>`;
@@ -540,6 +568,8 @@ C.ticket = () => {
       <div class="prop"><span>${A('الحالة', 'Status')}</span><select class="input" onchange="App.status('${t.id}',this.value)">${Object.keys(ST).map(k => `<option value="${k}" ${t.st === k ? 'selected' : ''}>${A(ST[k][0], ST[k][1])}</option>`).join('')}</select></div>
       <div class="prop"><span>${A('الأولوية', 'Priority')}</span><select class="input" onchange="App.prio('${t.id}',this.value)">${Object.keys(PR).map(k => `<option value="${k}" ${t.p === k ? 'selected' : ''}>${A(PR[k][0], PR[k][1])}</option>`).join('')}</select></div>
       <div class="prop"><span>${A('المسؤول', 'Assignee')}</span>${sup ? `<select class="input" onchange="App.assign('${t.id}',this.value)"><option value="">${A('غير مسندة', 'Unassigned')}</option>${D.staff.filter(x => x[3] === 'employee').map(x => `<option value="${x[0]}" ${t.emp === x[0] ? 'selected' : ''}>${A(x[1], x[2])}</option>`).join('')}</select>` : `<b>${staffName(t.emp)}</b>`}</div>
+      <div class="prop"><span>${A('تاريخ الإنشاء', 'Created')}</span><b class="money">${fmtD(t.at)} · ${fmtT(t.at)}</b></div>
+      ${ratings[t.id] ? `<div class="prop"><span>${A('تقييم العميل', 'Customer rating')}</span>${stars(ratings[t.id].score)}</div>` : ''}
       <div class="prop"><span>${A('النوع', 'Type')}</span>${typeB(t)}</div>
       <div class="prop"><span>${A('القناة', 'Channel')}</span><span>${A(CH[t.ch][2], CH[t.ch][1])}</span></div>
       <div class="prop"><span>${A('المهلة', 'SLA')}</span>${slaB(t)}</div>
@@ -592,6 +622,44 @@ C.team = () => {
     ${perms.map(p => `<tr><td>${A(p[0], p[1])}</td><td><input type="checkbox" ${p[2] ? 'checked' : ''} style="accent-color:var(--accent);width:17px;height:17px" onchange="App.toast('${A('تم حفظ الصلاحيات', 'Permissions saved')}')"></td><td><input type="checkbox" checked disabled style="accent-color:var(--accent);width:17px;height:17px"></td></tr>`).join('')}</table></div></div>`;
 };
 let rep = 'week';
+let srEmp = null, srPeriod = 'month';
+function staffStats(id) {
+  const ts = tickets.filter(t => t.emp === id), done = ts.filter(t => t.st === 'done'), open = ts.filter(t => t.st !== 'done');
+  const late = open.filter(t => t.age > slaOf(t)).length;
+  const rs = ts.map(t => ratings[t.id]).filter(Boolean);
+  const base = { AO: [142, 96, 4.8, 1.6], NS: [118, 91, 4.6, 2.1], KH: [97, 88, 4.5, 2.4] }[id] || [0, 90, 0, 2];
+  const mul = { day: 0.05, week: 0.25, month: 1 }[srPeriod];
+  return { total: Math.round(base[0] * mul) + ts.length, done: Math.round(base[0] * mul * .93) + done.length, open: open.length, late, sla: base[1],
+    rating: rs.length ? (rs.reduce((a, r) => a + r.score, 0) / rs.length + base[2] * 3) / 4 : base[2], ratings: rs.length + Math.round(base[0] * mul * .4),
+    avg: base[3], cmp: complaints.filter(c => c.emp === id).length, ts };
+}
+C.staffreport = () => {
+  const emps = D.staff.filter(s => s[3] === 'employee');
+  const sel = srEmp ? emps.find(e => e[0] === srEmp) : null;
+  return hero(A('تقرير الموظفين', 'Staff report'), A('أداء الموظفين بالتفصيل', 'Detailed staff performance'), A('عدد التذاكر، الالتزام بالمهلة، متوسط وقت الإنجاز، تقييمات العملاء والشكاوى لكل موظف.', 'Tickets, SLA, average completion time, customer ratings and complaints for every employee.'),
+    `<button class="btn" onclick="App.toast('${A('تم تجهيز ملف Excel', 'Excel export ready')}','file-spreadsheet')">${ic('file-spreadsheet')}Excel</button><button class="btn light" onclick="window.print()">${ic('printer')}PDF</button>`) +
+  `<div class="toolbar"><div class="tabs">${[['day', 'اليوم', 'Today'], ['week', 'هذا الأسبوع', 'This week'], ['month', 'هذا الشهر', 'This month']].map(([k, a, e]) => `<button class="${srPeriod === k ? 'active' : ''}" onclick="App.srP('${k}')">${A(a, e)}</button>`).join('')}</div></div>
+  <div class="card tbl"><table><tr><th>${A('الموظف', 'Employee')}</th><th>${A('التذاكر', 'Tickets')}</th><th>${A('المكتملة', 'Completed')}</th><th>${A('المفتوحة', 'Open')}</th><th>${A('المتأخرة', 'Overdue')}</th><th>${A('ضمن المهلة', 'Within SLA')}</th><th>${A('متوسط الإنجاز', 'Avg. completion')}</th><th>${A('التقييم', 'Rating')}</th><th>${A('الشكاوى', 'Complaints')}</th><th></th></tr>
+    ${emps.map(e => { const x = staffStats(e[0]); return `<tr class="click ${srEmp === e[0] ? 'sel' : ''}" onclick="App.srE('${e[0]}')"><td><div style="display:flex;gap:10px;align-items:center"><div class="avatar sm">${e[0]}</div><b>${A(e[1], e[2])}</b></div></td><td>${x.total}</td><td>${x.done}</td><td>${x.open}</td><td>${x.late ? `<span class="badge bad">${x.late}</span>` : '0'}</td>
+      <td><div style="display:flex;gap:8px;align-items:center"><div class="progress" style="width:70px"><i style="width:${x.sla}%"></i></div>${x.sla}%</div></td><td>${x.avg} ${A('يوم', 'days')}</td><td>${stars(Math.round(x.rating))} <b>${x.rating.toFixed(1)}</b> <span class="small muted">(${x.ratings})</span></td><td>${x.cmp ? `<span class="badge warn">${x.cmp}</span>` : '0'}</td><td>${ic(en() ? 'chevron-right' : 'chevron-left')}</td></tr>`; }).join('')}</table></div>
+  ${sel ? (() => { const x = staffStats(sel[0]); return `<div class="card section"><div class="card-h"><div style="display:flex;gap:12px;align-items:center"><div class="avatar">${sel[0]}</div><div><h2>${A(sel[1], sel[2])}</h2><div class="small muted">${A('تفاصيل تذاكر الموظف', 'Employee ticket details')}</div></div></div><button class="iconbtn" onclick="App.srE(null)">${ic('x')}</button></div>
+    <div class="grid g4">${stat('ticket', A('التذاكر', 'Tickets'), x.total, '')}${stat('circle-check-big', A('المكتملة', 'Completed'), x.done, '')}${stat('timer', A('ضمن المهلة', 'Within SLA'), x.sla + '%', '')}${stat('star', A('التقييم', 'Rating'), x.rating.toFixed(1), x.ratings + A(' تقييم', ' ratings'))}</div>
+    <div class="tbl section"><table><tr><th>#</th><th>${A('الخدمة', 'Service')}</th><th>${A('العميل', 'Customer')}</th><th>${A('التاريخ', 'Date')}</th><th>${A('الوقت', 'Time')}</th><th>${A('الحالة', 'Status')}</th><th>SLA</th><th>${A('التقييم', 'Rating')}</th></tr>
+    ${x.ts.map(t => `<tr class="click" onclick="App.go('${link('ticket', t.id)}')"><td class="muted">${t.id}</td><td>${nm(svc(t.svc))}</td><td>${custName(t.cust)}</td><td class="money">${fmtD(t.at)}</td><td class="money muted">${fmtT(t.at)}</td><td>${stB(t.st)}</td><td>${slaB(t)}</td><td>${ratings[t.id] ? stars(ratings[t.id].score) : '—'}</td></tr>`).join('') || `<tr><td colspan="8" class="muted">${A('لا توجد تذاكر', 'No tickets')}</td></tr>`}</table></div></div>`; })() : `<div class="small muted section">${ic('mouse-pointer-click')} ${A('اضغط على موظف لعرض تفاصيل تذاكره.', 'Click an employee to see their tickets.')}</div>`}`;
+};
+let qTab = 'ratings';
+C.quality = () => {
+  const rs = Object.entries(ratings).map(([tk, r]) => ({ tk, ...r, t: tickets.find(x => x.id === tk) })).filter(r => r.t).sort((a, b) => b.at - a.at);
+  const avg = rs.length ? rs.reduce((a, r) => a + r.score, 0) / rs.length : 0;
+  return hero(A('الجودة', 'Quality'), A('التقييمات والشكاوى', 'Ratings & complaints'), A('تقييمات العملاء لكل مختص، والشكاوى مع حالتها ومتابعتها.', 'Customer ratings for each specialist, and complaints with their status.')) +
+  `<div class="grid g4 section">${stat('star', A('متوسط التقييم', 'Average rating'), avg ? avg.toFixed(1) + ' / 5' : '—', rs.length + A(' تقييم', ' ratings'))}${stat('smile', A('راضون (٤–٥)', 'Satisfied (4–5)'), rs.length ? Math.round(rs.filter(r => r.score >= 4).length / rs.length * 100) + '%' : '—', '')}${stat('message-square-warning', A('شكاوى مفتوحة', 'Open complaints'), complaints.filter(c => c.st !== 'closed').length, '')}${stat('check-check', A('شكاوى محلولة', 'Resolved'), complaints.filter(c => c.st === 'closed').length, '')}</div>
+  <div class="toolbar"><div class="tabs">${[['ratings', 'التقييمات', 'Ratings'], ['complaints', 'الشكاوى', 'Complaints']].map(([k, a, e]) => `<button class="${qTab === k ? 'active' : ''}" onclick="App.qTab('${k}')">${A(a, e)}</button>`).join('')}</div></div>
+  ${qTab === 'ratings' ? `<div class="card tbl"><table><tr><th>${A('التاريخ', 'Date')}</th><th>${A('الطلب', 'Request')}</th><th>${A('العميل', 'Customer')}</th><th>${A('المختص', 'Specialist')}</th><th>${A('التقييم', 'Rating')}</th><th>${A('التعليق', 'Comment')}</th></tr>
+    ${rs.map(r => `<tr class="click" onclick="App.go('${link('ticket', r.tk)}')"><td class="money">${fmtD(r.at)} <span class="muted">${fmtT(r.at)}</span></td><td class="muted">${r.tk}</td><td>${custName(r.t.cust)}</td><td>${staffName(r.t.emp)}</td><td>${stars(r.score)}</td><td style="white-space:normal;min-width:200px">${esc(r.text)}</td></tr>`).join('') || `<tr><td colspan="6" class="muted">${A('لا توجد تقييمات بعد', 'No ratings yet')}</td></tr>`}</table></div>`
+  : `<div class="card tbl"><table><tr><th>#</th><th>${A('التاريخ', 'Date')}</th><th>${A('الطلب', 'Request')}</th><th>${A('العميل', 'Customer')}</th><th>${A('ضد', 'About')}</th><th>${A('النوع', 'Type')}</th><th>${A('الشكوى', 'Complaint')}</th><th>${A('الحالة', 'Status')}</th></tr>
+    ${complaints.map(c => `<tr><td class="muted">${c.id}</td><td class="money">${fmtD(c.at)} <span class="muted">${fmtT(c.at)}</span></td><td><a style="cursor:pointer" onclick="App.go('${link('ticket', c.tk)}')">${c.tk}</a></td><td>${custName(c.cust)}</td><td>${staffName(c.emp)}</td><td>${A(CMP[c.cat][0], CMP[c.cat][1])}</td><td style="white-space:normal;min-width:220px">${esc(c.text)}</td>
+      <td><select class="input" style="width:auto;padding:6px 10px" onchange="App.cmpSt('${c.id}',this.value)">${Object.keys(CST).map(k => `<option value="${k}" ${c.st === k ? 'selected' : ''}>${A(CST[k][0], CST[k][1])}</option>`).join('')}</select></td></tr>`).join('') || `<tr><td colspan="8" class="muted">${A('لا توجد شكاوى', 'No complaints')}</td></tr>`}</table></div>`}`;
+};
 C.reports = () => {
   const sets = { day: [[20, 35, 52, 70, 64, 88, 72, 40], '8 10 12 14 16 18 20 22'.split(' ')], week: [[45, 62, 58, 80, 71, 92, 66], A('أحد إثن ثلا أرب خمي جمع سبت', 'Sun Mon Tue Wed Thu Fri Sat').split(' ')], month: [[55, 61, 70, 66, 74, 82, 78, 90, 86, 94, 88, 99], '1 2 3 4 5 6 7 8 9 10 11 12'.split(' ')] };
   const k = { day: [23, '8,420', '96%'], week: [148, '52,180', '94%'], month: [612, '184,250', '93%'] }[rep];
@@ -621,13 +689,55 @@ function pricingTotals() {
   const v = psel.vat ? 1.15 : 1;
   return { build, care, eOnce, eMonth, eYear, v, now: build * v, monthly: (care + eMonth) * v, firstYear: (build + eOnce + (care + eMonth) * 12 + eYear) * v };
 }
+function pricingTabs() {
+  return `<div class="wrap no-print" style="padding-top:20px"><div class="tabs">${[['', 'file-signature', 'تكلفة التطوير', 'Development cost'], ['terms', 'calendar-check', 'الدفعات والدعم', 'Payments & support']].map(([k, i, a, e]) => `<button class="${(R.sub || '') === k ? 'active' : ''}" onclick="App.go('pricing${k ? '/' + k : ''}')">${ic(i)}${A(a, e)}</button>`).join('')}</div></div>`;
+}
+function termsPage() {
+  const TT = D.terms2, total = PX.build.reduce((a, x) => a + x[4], 0);
+  const sec = (i, badge, title, sub, body) => `<div class="card bucket section"><div class="bucket-h"><div class="ic">${ic(i)}</div><div><span class="badge">${badge}</span><h2 style="margin-top:4px">${title}</h2></div></div>${sub ? `<p class="muted small">${sub}</p>` : ''}${body}</div>`;
+  const li = (items, icon, color) => items.map(x => `<div class="line" style="justify-content:flex-start;gap:10px"><span style="color:${color}">${ic(icon)}</span><span>${P(x)}</span></div>`).join('');
+  return `<div class="wrap" style="padding-top:16px;padding-bottom:60px">
+  <section class="hero"><div class="eyebrow">${ic('calendar-check')}${A('الدفعات والدعم', 'Payments & support')} · SLV-2026-01</div><h1>${A('كيف تتم الدفعات والدعم بعد الإطلاق', 'How payments and post-launch support work')}</h1>
+    <p>${A('تفاصيل تكلفة التطوير، جدول الدفعات المرتبط بمراحل التسليم، ما يشمله الدعم المجاني، وكيف تُسعّر الطلبات الجديدة.', 'The development cost, a payment schedule tied to delivery milestones, what free support covers, and how new requests are priced.')}</p></section>
+  <div class="grid g21 section" style="align-items:start"><div>
+    ${sec('code-xml', A('تكلفة التطوير', 'Development cost'), A('تكلفة التطوير', 'Development cost'), A('مبلغ ثابت يشمل بناء المنصة كاملة ورفعها على الخادم وإعداده.', 'A fixed amount covering the whole platform, deployment and server setup.'),
+      PX.build.map(x => `<div class="line"><div><b>${A(x[0], x[1])}</b><div class="d">${A(x[2], x[3])}</div></div><b class="money">${money(x[4])}</b></div>`).join('') +
+      `<div class="line" style="background:var(--accent-soft);border-radius:14px;padding:16px;border:0;margin-top:8px;align-items:center"><b style="font-size:16px">${A('تكلفة التطوير (مبلغ ثابت)', 'Development cost (fixed)')}</b><b class="money" style="font-size:24px;color:var(--accent)">${money(total)}</b></div>`)}
+
+    ${sec('wallet', A('جدول الدفعات', 'Payment schedule'), A('الدفعات حسب مراحل التسليم', 'Payments by milestone'), A('كل دفعة مرتبطة بمرحلة تسليم واضحة، وتبدأ المرحلة التالية بعد استلام الدفعة.', 'Each payment is tied to a clear delivery; the next phase starts once it is received.'),
+      `<div class="timeline-pay">${TT.payments.map((p, i) => `<div class="tp"><div class="tp-n">${i + 1}</div><div style="flex:1"><b>${A(p[0], p[1])}</b><div class="small muted">${A(p[2], p[3])}</div></div><div style="text-align:end"><b class="money">${money(total * p[4] / 100)}</b><div class="small muted">${p[4]}%</div></div></div>`).join('')}</div>
+      <div class="small muted" style="margin-top:10px">${ic('info')} ${A(TT.payNote[0], TT.payNote[1])}</div>`)}
+
+    ${sec('shield-check', A('مجاني', 'Free'), A(`الدعم المجاني لمدة ${TT.freeMonths} أشهر بعد الإطلاق`, `${TT.freeMonths} months of free support after launch`), A('فترة ضمان تبدأ من يوم إطلاق المنصة.', 'A warranty period starting on launch day.'),
+      `<div class="small" style="font-weight:700;margin:6px 0">${A('مشمول مجانًا', 'Included for free')}</div>${li(TT.free, 'circle-check', 'var(--ok)')}
+       <div class="small" style="font-weight:700;margin:16px 0 6px">${A('غير مشمول (يُسعّر كطلب جديد)', 'Not included (priced as a new request)')}</div>${li(TT.paid, 'circle-x', 'var(--bad)')}
+       <div class="small" style="font-weight:700;margin:16px 0 6px">${A('أوقات الاستجابة لإصلاح الأعطال', 'Bug-fix response times')}</div>
+       <div class="tbl"><table><tr><th>${A('الأولوية', 'Priority')}</th><th>${A('مثال', 'Example')}</th><th>${A('الاستجابة', 'Response')}</th></tr>${TT.sla.map(r => `<tr><td><span class="badge ${r[4]}">${A(r[0], r[1])}</span></td><td style="white-space:normal">${P(r[2])}</td><td><b>${P(r[3])}</b></td></tr>`).join('')}</table></div>`)}
+
+    ${sec('life-buoy', A('بعد فترة الضمان', 'After the warranty'), A('الدعم بعد الأشهر المجانية', 'Support after the free period'), A('اختياري — يمكن الاشتراك شهريًا أو الدفع حسب الطلب.', 'Optional — monthly plan or pay as you go.'),
+      `<div class="grid g3">${TT.plans.map((p, i) => `<div class="card" style="${i === 1 ? 'border-color:var(--accent)' : ''}">${i === 1 ? `<span class="badge">${A('موصى به', 'Recommended')}</span>` : ''}<h3 style="margin:6px 0 2px">${A(p[0], p[1])}</h3><div style="font-family:var(--font-head);font-size:24px;font-weight:700">${p[2] ? money(p[2]) : money(TT.hourly) + A(' / ساعة', ' / hour')}</div><div class="small muted">${p[2] ? A('شهريًا', 'per month') : A('بدون اشتراك', 'no subscription')}</div><div style="margin-top:10px">${p[3].map(f => `<div class="small" style="display:flex;gap:6px;padding:3px 0">${ic('check')}${P(f)}</div>`).join('')}</div></div>`).join('')}</div>`)}
+
+    ${sec('sparkles', A('الطلبات الجديدة', 'New requests'), A('تسعير الطلبات الجديدة والتعديلات', 'Pricing new requests and changes'), A(`أي ميزة أو تعديل غير موجود في النطاق المتفق عليه. سعر الساعة ${TT.hourly} ر.س.`, `Anything outside the agreed scope. Hourly rate ${TT.hourly} SAR.`),
+      `<div class="tbl"><table><tr><th>${A('الحجم', 'Size')}</th><th>${A('أمثلة', 'Examples')}</th><th>${A('السعر التقريبي', 'Approx. price')}</th><th>${A('المدة', 'Time')}</th></tr>${TT.newReq.map(r => `<tr><td><b>${A(r[0], r[1])}</b></td><td style="white-space:normal;min-width:200px">${P(r[2])}</td><td class="money"><b>${P(r[3])}</b></td><td>${P(r[4])}</td></tr>`).join('')}</table></div>
+      <div class="small" style="font-weight:700;margin:16px 0 6px">${A('خطوات تنفيذ أي طلب جديد', 'How a new request works')}</div>
+      <div class="steps-row">${TT.process.map((x, i) => `<div><span>${i + 1}</span>${P(x)}</div>`).join('')}</div>`)}
+  </div>
+  <div class="sumbox"><div class="card"><div class="eyebrow">${A('الملخص', 'Summary')}</div>
+    <div class="tline big" style="margin-top:6px"><span>${A('تكلفة التطوير', 'Development cost')}</span><span class="money">${money(total)}</span></div>
+    ${TT.payments.map((p, i) => `<div class="tline"><span>${i + 1}. ${A(p[0], p[1])}</span><b class="money">${money(total * p[4] / 100)}</b></div>`).join('')}
+    <div class="tline"><span>${A('الدعم المجاني', 'Free support')}</span><b>${TT.freeMonths} ${A('أشهر', 'months')}</b></div>
+    <div class="tline"><span>${A('الدعم بعدها', 'Support after')}</span><b class="money">${A('من ', 'from ')}${money(TT.plans[0][2])}${A(' / شهر', ' / mo')}</b></div>
+    <div class="tline"><span>${A('سعر ساعة الطلبات الجديدة', 'New requests hourly')}</span><b class="money">${money(TT.hourly)}</b></div>
+    <button class="btn ghost block no-print" style="margin-top:14px" onclick="window.print()">${ic('printer')}${A('طباعة / حفظ PDF', 'Print / Save PDF')}</button></div></div></div></div>`;
+}
 function pricingPage() {
   const top = `<nav class="pub-nav">${brand()}<div class="links"></div><div class="tools"><button class="pill" onclick="App.lang()">${en() ? 'العربية' : 'EN'}</button><button class="iconbtn" onclick="App.theme()">${ic(document.documentElement.dataset.theme === 'dark' ? 'sun' : 'moon')}</button>${pricingUnlocked() ? `<button class="btn sm ghost no-print" onclick="window.print()">${ic('printer')}<span class="hide-m">PDF</span></button>` : ''}</div></nav>`;
   if (!pricingUnlocked()) return top + `<div class="wrap"><div class="card lock"><div class="ic">${ic('lock-keyhole')}</div><h2>${A('عرض السعر', 'Price proposal')}</h2><p class="muted">${A('هذه الصفحة محمية. أدخل كلمة المرور.', 'This page is protected. Enter the password.')}</p>
     <form onsubmit="App.unlock(event)" style="display:flex;gap:8px;margin-top:18px"><input class="input" type="password" id="pw" placeholder="••••••••" autofocus><button class="btn">${ic('lock-open')}${A('فتح', 'Open')}</button></form><p id="pwErr" class="small" style="color:var(--bad);min-height:18px"></p></div></div>`;
+  if (R.sub === 'terms') return top + pricingTabs() + termsPage();
   const t = pricingTotals();
   const freqTxt = o => o[5] ? money(o[5]) + A(' / شهريًا', ' / month') : o[6] ? money(o[6]) + A(' / سنويًا', ' / year') : o[4] ? money(o[4]) + A(' مرة واحدة', ' one-time') : A('بدون رسوم ثابتة', 'No fixed fee');
-  return top + `<div class="wrap" style="padding-top:24px;padding-bottom:60px">
+  return top + pricingTabs() + `<div class="wrap" style="padding-top:24px;padding-bottom:60px">
   <section class="hero"><div class="eyebrow">${ic('file-signature')}${A('عرض سعر', 'Price proposal')} · SLV-2026-01</div><h1>${A(`تطوير منصة ${BRAND} للخدمات الحكومية`, `Building the ${BRAND} government-services platform`)}</h1>
     <p>${A('العرض من جزأين: (١) تكلفة التطوير — بناء المنصة كاملة (الواجهات، الخلفية، قاعدة البيانات، الأمان، تجهيز الخادم والإطلاق) بمبلغ ثابت. (٢) خدمات خارجية إضافية يدفعها العميل للمزود مباشرة، وأنا أتولى إعدادها وربطها.', 'Two parts: (1) the development fee — building the whole platform (interfaces, back end, database, security, server setup and launch) for one fixed amount; (2) extra outside services the client pays to providers directly, which I set up and connect.')}</p>
     <div class="actions"><span class="badge" style="background:rgba(255,255,255,.1);color:#fff">${ic('calendar')}${A('مدة التنفيذ: شهران (٨ أسابيع)', 'Delivery: 2 months (8 weeks)')}</span><span class="badge" style="background:rgba(255,255,255,.1);color:#fff">${ic('clock')}${A('صالح ', 'Valid ')}${PX.terms.validity}${A(' يومًا', ' days')}</span></div></section>
@@ -788,6 +898,31 @@ window.App = {
   },
   roomT(k) { roomState[k] = !roomState[k]; render(); },
   endCall() { toast(A('انتهى الاجتماع', 'Meeting ended'), 'phone-off'); go(link('meetings')); },
+  // --- ratings, complaints, staff report ---
+  pickStar(n) { App._star = n; document.querySelectorAll('#rateStars span').forEach((el, i) => el.classList.toggle('on', i < n)); },
+  rate(id) {
+    if (!App._star) return toast(A('اختر عدد النجوم', 'Pick a star rating'), 'circle-alert');
+    ratings[id] = { score: App._star, text: $('#rateText').value.trim(), at: Date.now() }; App._star = 0;
+    save(); render(); toast(A('شكرًا لتقييمك!', 'Thanks for your rating!'), 'star');
+  },
+  complain(tk) {
+    const t = tickets.find(x => x.id === tk);
+    modal(mHead(A('تقديم شكوى', 'File a complaint'), A('تصل الشكوى للمشرف مباشرة وتتم متابعتها', 'It goes straight to the supervisor')) + `<div class="grid" style="gap:12px;margin-top:10px">
+      <div class="small muted">#${t.id} · ${A('المختص: ', 'Specialist: ')}<b>${staffName(t.emp)}</b></div>
+      <label class="field">${A('نوع الشكوى', 'Type')}<select class="input" id="cCat">${Object.keys(CMP).map(k => `<option value="${k}">${A(CMP[k][0], CMP[k][1])}</option>`).join('')}</select></label>
+      <label class="field">${A('التفاصيل', 'Details')}<textarea class="input" id="cText" rows="4"></textarea></label>
+      <button class="btn" onclick="App.saveComplaint('${tk}')">${ic('send')}${A('إرسال الشكوى', 'Send complaint')}</button></div>`);
+  },
+  saveComplaint(tk) {
+    const text = $('#cText').value.trim(); if (!text) return toast(A('اكتب تفاصيل الشكوى', 'Add some details'), 'circle-alert');
+    const t = tickets.find(x => x.id === tk), n = 201 + complaints.length;
+    complaints.unshift({ id: 'CMP-' + n, tk, cust: t.cust, emp: t.emp, cat: $('#cCat').value, text, st: 'new', at: Date.now() });
+    save(); closeAll(); render(); toast(A('تم استلام الشكوى رقم CMP-', 'Complaint received: CMP-') + n, 'check');
+  },
+  cmpSt(id, st) { complaints.find(c => c.id === id).st = st; save(); toast(A('تم تحديث حالة الشكوى', 'Complaint updated')); },
+  qTab(k) { qTab = k; render(); },
+  srE(id) { srEmp = srEmp === id ? null : id; render(); },
+  srP(k) { srPeriod = k; render(); },
   // --- supervisor ---
   svcSet(id, k, v) { svc(id)[k] = v; save(); toast(A('تم الحفظ — يظهر في الموقع فورًا', 'Saved — live on the site')); },
   fee(v) { D.followUpFee = v; toast(A('تم الحفظ', 'Saved')); },
