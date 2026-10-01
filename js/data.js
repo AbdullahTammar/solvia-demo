@@ -40,6 +40,7 @@ window.D = {
     ['NS', 'نورة السبيعي', 'Noura Alsubaie', 'employee'],
     ['KH', 'خالد الحربي', 'Khalid Alharbi', 'employee'],
     ['RH', 'روان هاشم', 'Rawan Hashim', 'supervisor'],
+    ['DV', 'المطوّر', 'Developer', 'developer'],
   ],
 
   customers: [
@@ -88,7 +89,6 @@ window.D = {
       ['إصلاح أي خلل أو عطل في الخصائص المتفق عليها', 'Fixing any bug in the agreed features'],
       ['التحديثات الأمنية وتحديث المكتبات', 'Security and library updates'],
       ['مراقبة الخادم والنسخ الاحتياطي اليومي', 'Server monitoring and daily backups'],
-      ['دعم فني عبر واتساب أو التذاكر (الأحد–الخميس ٩ص–٥م)', 'Support via WhatsApp or tickets (Sun–Thu 9am–5pm)'],
       ['تعديلات بسيطة على النصوص والأسعار', 'Small text and price edits'],
       ['جلسة تدريب إضافية للموظفين', 'One extra staff training session'],
     ],
@@ -102,8 +102,8 @@ window.D = {
     // [ar, en, example, response, badge]
     sla: [
       ['حرج', 'Critical', ['المنصة متوقفة أو الدفع لا يعمل', 'Platform down or payments failing'], ['خلال ٤ ساعات', 'Within 4 hours'], 'bad'],
-      ['عالي', 'High', ['ميزة رئيسية لا تعمل', 'A main feature is broken'], ['خلال يوم عمل', 'Within 1 business day'], 'warn'],
-      ['عادي', 'Normal', ['خطأ بسيط أو مشكلة في العرض', 'Minor bug or display issue'], ['خلال ٣ أيام عمل', 'Within 3 business days'], 'info'],
+      ['عالي', 'High', ['ميزة رئيسية لا تعمل', 'A main feature is broken'], ['خلال يوم', 'Within 1 day'], 'warn'],
+      ['عادي', 'Normal', ['خطأ بسيط أو مشكلة في العرض', 'Minor bug or display issue'], ['خلال ٣ أيام', 'Within 3 days'], 'info'],
     ],
     hourly: 250,
     // [ar, en, price, features]
@@ -118,7 +118,7 @@ window.D = {
       ['متوسط', 'Medium', ['صفحة جديدة، تقرير جديد، تعديل مسار التذاكر', 'New page, new report, ticket workflow change'], ['١٬٥٠٠ – ٤٬٠٠٠ ر.س', '1,500 – 4,000 SAR'], ['٣–٧ أيام', '3–7 days']],
       ['كبير', 'Large', ['وحدة كاملة، ربط مع جهة جديدة، تطبيق جوال', 'Full module, new integration, mobile app'], ['يبدأ من ٥٬٠٠٠ ر.س (عرض سعر)', 'From 5,000 SAR (quoted)'], ['حسب النطاق', 'Depends on scope']],
     ],
-    process: [['إرسال الطلب', 'Send the request'], ['تقدير السعر والمدة خلال يومي عمل', 'Estimate within 2 business days'], ['الموافقة ودفع ٥٠٪', 'Approve & pay 50%'], ['التنفيذ والاختبار', 'Build & test'], ['النشر ودفع الباقي', 'Release & pay the rest']],
+    process: [['يفتح المشرف طلب تطوير من داخل المنصة', 'The supervisor opens a dev request inside the platform'], ['يرسل المطوّر السعر والمدة خلال يومين', 'The developer sends price & time within 2 days'], ['الموافقة ودفع ٥٠٪', 'Approve & pay 50%'], ['التنفيذ والاختبار', 'Build & test'], ['النشر ودفع الباقي', 'Release & pay the rest']],
   },
 
   pricing: {

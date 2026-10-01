@@ -34,6 +34,11 @@ let ratings = store.get('ratings', {
   'REQ-10418': { score: 5, text: 'خدمة ممتازة وسريعة، شكرًا خالد', at: Date.now() - 3 * HOUR },
   'REQ-10412': { score: 4, text: 'الاستشارة كانت واضحة ومفيدة', at: Date.now() - 2 * HOUR },
 });
+let devreqs = store.get('devreqs', [
+  { id: 'DEV-103', type: 'feature', title: 'تقرير شهري لكل منشأة يُرسل بالبريد', desc: 'تقرير PDF تلقائي أول كل شهر بطلبات المنشأة ومدفوعاتها.', p: 'normal', step: 2, price: 2500, days: 5, at: Date.now() - 30 * HOUR },
+  { id: 'DEV-102', type: 'bug', title: 'رسالة OTP تتأخر أحيانًا', desc: 'بعض العملاء يستلمون الرمز بعد دقيقتين.', p: 'high', step: 3, price: 0, days: 1, at: Date.now() - 50 * HOUR },
+  { id: 'DEV-101', type: 'feature', title: 'إضافة خدمة "أبشر أعمال"', desc: 'إضافة منصة أبشر أعمال مع ٣ خدمات.', p: 'normal', step: 5, price: 800, days: 2, at: Date.now() - 200 * HOUR },
+]);
 let complaints = store.get('complaints', [
   { id: 'CMP-201', tk: 'REQ-10422', cust: 'C4', emp: 'NS', cat: 'delay', text: 'الطلب تأخر عن الموعد المحدد ولم يصلني تحديث.', st: 'review', at: Date.now() - 5 * HOUR },
 ]);
@@ -44,8 +49,8 @@ let meetings = store.get('meetings', [
 let session = store.get('session', null);   // null | customer | employee | supervisor
 let ctype = store.get('ctype', 'ind');       // customer account: ind (individual) | biz (company)
 const cid = () => ctype === 'biz' ? 'C2' : 'C1';
-const save = () => { store.set('platforms', platforms); store.set('services', services); store.set('tickets', tickets); store.set('msgs', msgs); store.set('meetings', meetings); store.set('ratings', ratings); store.set('complaints', complaints); };
-const ME = { customer: 'C1', employee: 'AO', supervisor: 'RH' };
+const save = () => { store.set('platforms', platforms); store.set('services', services); store.set('tickets', tickets); store.set('msgs', msgs); store.set('meetings', meetings); store.set('ratings', ratings); store.set('complaints', complaints); store.set('devreqs', devreqs); };
+const ME = { customer: 'C1', employee: 'AO', supervisor: 'RH', developer: 'DV' };
 const svc = id => services.find(s => s.id === id) || services[0];
 const plat = id => platforms.find(p => p.id === id);
 const cust = id => D.customers.find(c => c[0] === id);
@@ -55,7 +60,7 @@ const custName = id => A(cust(id)[1], cust(id)[2]);
 const nm = o => A(o.ar, o.en);
 const platName = s => plat(s.pl) ? nm(plat(s.pl)) : BRAND;
 const slaOf = t => svc(t.svc).days * 24;
-const daysTxt = d => `${d} ${A(d === 1 ? 'يوم عمل' : d <= 10 && d > 2 ? 'أيام عمل' : 'يوم عمل', d === 1 ? 'business day' : 'business days')}`;
+const daysTxt = d => `${d} ${A(d === 1 ? 'يوم' : d === 2 ? 'يومان' : d <= 10 ? 'أيام' : 'يومًا', d === 1 ? 'day' : 'days')}`;
 const dur = h => h >= 24 ? `${Math.round(h / 24)}${A(' يوم', 'd')}` : `${h}${A(' س', 'h')}`;
 
 function seedMsgs(t) {
@@ -280,10 +285,11 @@ function servicePage() {
 const MENUS = {
   customer: [['home', 'house', 'الرئيسية', 'Home'], ['services', 'layout-grid', 'الخدمات', 'Services'], ['requests', 'ticket', 'طلباتي', 'My requests'], ['meetings', 'video', 'الاجتماعات', 'Meetings'], ['invoices', 'receipt', 'الفواتير', 'Invoices'], ['forms', 'file-down', 'النماذج', 'Forms']],
   company: [['home', 'layout-dashboard', 'لوحة المنشأة', 'Company home'], ['services', 'layout-grid', 'الخدمات', 'Services'], ['requests', 'ticket', 'طلبات المنشأة', 'Company requests'], ['employees', 'users', 'الموظفون', 'Employees'], ['plan', 'gem', 'الاشتراك', 'Subscription'], ['meetings', 'video', 'الاجتماعات', 'Meetings'], ['invoices', 'receipt', 'الفواتير', 'Invoices'], ['forms', 'file-down', 'النماذج', 'Forms']],
+  developer: [['devreq', 'code-xml', 'طلبات التطوير', 'Dev requests']],
   employee: [['desk', 'kanban', 'التذاكر', 'Tickets'], ['meetings', 'video', 'الاجتماعات', 'Meetings'], ['customers', 'contact', 'العملاء', 'Customers'], ['platforms', 'globe', 'المنصات الحكومية', 'Gov platforms'], ['forms', 'file-down', 'النماذج', 'Forms']],
-  supervisor: [['overview', 'layout-dashboard', 'نظرة عامة', 'Overview'], ['desk', 'kanban', 'التذاكر', 'Tickets'], ['catalog', 'tags', 'الخدمات والأسعار', 'Services & prices'], ['team', 'users', 'الفريق والصلاحيات', 'Team & roles'], ['staffreport', 'user-round-search', 'تقرير الموظفين', 'Staff report'], ['quality', 'star', 'التقييمات والشكاوى', 'Ratings & complaints'], ['reports', 'chart-column', 'التقارير', 'Reports'], ['finance', 'wallet', 'المالية والفواتير', 'Finance & invoices'], ['meetings', 'video', 'الاجتماعات', 'Meetings'], ['customers', 'contact', 'العملاء', 'Customers'], ['platforms', 'globe', 'المنصات الحكومية', 'Gov platforms']],
+  supervisor: [['overview', 'layout-dashboard', 'نظرة عامة', 'Overview'], ['desk', 'kanban', 'التذاكر', 'Tickets'], ['catalog', 'tags', 'الخدمات والأسعار', 'Services & prices'], ['team', 'users', 'الفريق والصلاحيات', 'Team & roles'], ['staffreport', 'user-round-search', 'تقرير الموظفين', 'Staff report'], ['devreq', 'code-xml', 'طلبات التطوير', 'Dev requests'], ['quality', 'star', 'التقييمات والشكاوى', 'Ratings & complaints'], ['reports', 'chart-column', 'التقارير', 'Reports'], ['finance', 'wallet', 'المالية والفواتير', 'Finance & invoices'], ['meetings', 'video', 'الاجتماعات', 'Meetings'], ['customers', 'contact', 'العملاء', 'Customers'], ['platforms', 'globe', 'المنصات الحكومية', 'Gov platforms']],
 };
-const ROLE_N = { customer: ['عميل', 'Customer'], employee: ['موظف', 'Employee'], supervisor: ['مشرف', 'Supervisor'] };
+const ROLE_N = { customer: ['عميل', 'Customer'], employee: ['موظف', 'Employee'], supervisor: ['مشرف', 'Supervisor'], developer: ['حساب المطوّر', 'Developer account'] };
 const menuOf = r => MENUS[r === 'customer' && ctype === 'biz' ? 'company' : r];
 const link = (page, id) => `app/${R.role}/${page}${id ? '/' + id : ''}`;
 function whoAmI() {
@@ -312,7 +318,7 @@ function appShell(content) {
         <button class="iconbtn menu-btn" onclick="App.side()">${ic('menu')}</button>
         <label class="search">${ic('search')}<input placeholder="${A('ابحث برقم الطلب أو اسم العميل…', 'Search by request # or customer…')}" onkeydown="if(event.key==='Enter')App.search(this.value)"></label>
         <div class="sp"></div>
-        ${inFrame ? '' : `<select class="input hide-m" style="width:auto;border-radius:999px;padding:7px 12px" onchange="App.as(this.value)" title="${A('عرض تجريبي', 'Demo view')}">${[['customer:ind', 'عميل فرد', 'Individual customer'], ['customer:biz', 'عميل منشأة', 'Company customer'], ['employee', 'موظف', 'Employee'], ['supervisor', 'مشرف', 'Supervisor']].map(([k, a, e]) => `<option value="${k}" ${k === (R.role === 'customer' ? 'customer:' + ctype : R.role) ? 'selected' : ''}>${A('عرض: ', 'View: ')}${A(a, e)}</option>`).join('')}</select>`}
+        ${inFrame ? '' : `<select class="input hide-m" style="width:auto;border-radius:999px;padding:7px 12px" onchange="App.as(this.value)" title="${A('عرض تجريبي', 'Demo view')}">${[['customer:ind', 'عميل فرد', 'Individual customer'], ['customer:biz', 'عميل منشأة', 'Company customer'], ['employee', 'موظف', 'Employee'], ['supervisor', 'مشرف', 'Supervisor'], ['developer', 'المطوّر', 'Developer']].map(([k, a, e]) => `<option value="${k}" ${k === (R.role === 'customer' ? 'customer:' + ctype : R.role) ? 'selected' : ''}>${A('عرض: ', 'View: ')}${A(a, e)}</option>`).join('')}</select>`}
         <button class="pill" onclick="App.lang()">${en() ? 'العربية' : 'EN'}</button>
         <button class="iconbtn" onclick="App.theme()">${ic(document.documentElement.dataset.theme === 'dark' ? 'sun' : 'moon')}</button>
         <button class="iconbtn" onclick="App.notif()">${ic('bell')}<span class="dot"></span></button>
@@ -609,7 +615,7 @@ function teamRows() {
 }
 C.catalog = () => hero(A('الخدمات والأسعار', 'Services & prices'), A('إدارة الخدمات', 'Manage services'), A('أضف خدمة جديدة بشعارها وسعرها — تظهر فورًا في الموقع العام وللعملاء والموظفين.', 'Add a service with its logo and price — it appears instantly on the public site, for customers and staff.'),
   `<button class="btn" onclick="App.addService()">${ic('plus')}${A('إضافة خدمة', 'Add service')}</button><button class="btn light" onclick="App.addPlatform()">${ic('globe')}${A('إضافة منصة', 'Add platform')}</button><button class="btn light" onclick="App.go('services')">${ic('eye')}${A('عرض في الموقع', 'View on site')}</button>`) +
-  `<div class="card tbl section"><table><tr><th>${A('الخدمة', 'Service')}</th><th>${A('الجهة', 'Platform')}</th><th>${A('السعر (ر.س)', 'Price (SAR)')}</th><th>${A('المدة (أيام عمل)', 'Days')}</th><th>${A('مفعّلة', 'Active')}</th><th></th></tr>
+  `<div class="card tbl section"><table><tr><th>${A('الخدمة', 'Service')}</th><th>${A('الجهة', 'Platform')}</th><th>${A('السعر (ر.س)', 'Price (SAR)')}</th><th>${A('المدة (أيام)', 'Days')}</th><th>${A('مفعّلة', 'Active')}</th><th></th></tr>
   ${services.map(s => `<tr><td><div style="display:flex;gap:10px;align-items:center">${svcLogo(s, 'sm')}<b>${nm(s)}</b></div></td><td>${platName(s)}</td>
     <td style="width:130px"><input class="input money" type="number" min="0" value="${s.price}" onchange="App.svcSet('${s.id}','price',+this.value)"></td><td style="width:100px"><input class="input" type="number" min="1" value="${s.days}" onchange="App.svcSet('${s.id}','days',+this.value)"></td>
     <td><input type="checkbox" ${s.on ? 'checked' : ''} style="accent-color:var(--accent);width:18px;height:18px" onchange="App.svcSet('${s.id}','on',this.checked)"></td><td><button class="iconbtn" style="width:32px;height:32px" onclick="App.addService('${s.id}')">${ic('pencil')}</button></td></tr>`).join('')}</table></div>
@@ -646,6 +652,33 @@ C.staffreport = () => {
     <div class="grid g4">${stat('ticket', A('التذاكر', 'Tickets'), x.total, '')}${stat('circle-check-big', A('المكتملة', 'Completed'), x.done, '')}${stat('timer', A('ضمن المهلة', 'Within SLA'), x.sla + '%', '')}${stat('star', A('التقييم', 'Rating'), x.rating.toFixed(1), x.ratings + A(' تقييم', ' ratings'))}</div>
     <div class="tbl section"><table><tr><th>#</th><th>${A('الخدمة', 'Service')}</th><th>${A('العميل', 'Customer')}</th><th>${A('التاريخ', 'Date')}</th><th>${A('الوقت', 'Time')}</th><th>${A('الحالة', 'Status')}</th><th>SLA</th><th>${A('التقييم', 'Rating')}</th></tr>
     ${x.ts.map(t => `<tr class="click" onclick="App.go('${link('ticket', t.id)}')"><td class="muted">${t.id}</td><td>${nm(svc(t.svc))}</td><td>${custName(t.cust)}</td><td class="money">${fmtD(t.at)}</td><td class="money muted">${fmtT(t.at)}</td><td>${stB(t.st)}</td><td>${slaB(t)}</td><td>${ratings[t.id] ? stars(ratings[t.id].score) : '—'}</td></tr>`).join('') || `<tr><td colspan="8" class="muted">${A('لا توجد تذاكر', 'No tickets')}</td></tr>`}</table></div></div>`; })() : `<div class="small muted section">${ic('mouse-pointer-click')} ${A('اضغط على موظف لعرض تفاصيل تذاكره.', 'Click an employee to see their tickets.')}</div>`}`;
+};
+const DSTEPS = {
+  feature: [['إرسال الطلب', 'Request sent'], ['تقدير السعر والمدة', 'Price & time estimate'], ['الموافقة ودفع ٥٠٪', 'Approved · 50% paid'], ['التنفيذ والاختبار', 'Build & test'], ['النشر ودفع الباقي', 'Released · rest paid']],
+  bug: [['إرسال البلاغ', 'Bug reported'], ['مراجعة المطوّر', 'Developer review'], ['الإصلاح والاختبار', 'Fix & test'], ['النشر', 'Released']],
+};
+function devAction(d) {
+  const dev = R.role === 'developer', sup = R.role === 'supervisor', last = DSTEPS[d.type].length;
+  if (d.step >= last) return `<span class="badge ok">${ic('check')}${A('مكتمل', 'Done')}</span>`;
+  const b = (lbl, i, fn) => `<button class="btn sm" onclick="${fn}">${ic(i)}${lbl}</button>`;
+  const wait = t => `<span class="badge mute">${t}</span>`;
+  if (d.type === 'bug') return dev ? b([0, A('بدء المراجعة', 'Start review'), A('بدء الإصلاح', 'Start fix'), A('نشر الإصلاح', 'Release fix')][d.step], 'wrench', `App.devStep('${d.id}')`) : wait(A('عند المطوّر', 'With developer'));
+  if (d.step === 1) return dev ? b(A('إرسال التقدير', 'Send estimate'), 'calculator', `App.devEstimate('${d.id}')`) : wait(A('بانتظار تقدير المطوّر', 'Awaiting estimate'));
+  if (d.step === 2) return sup ? b(A('موافقة ودفع ٥٠٪', 'Approve & pay 50%'), 'check', `App.devStep('${d.id}')`) : wait(A('بانتظار موافقة المشرف', 'Awaiting approval'));
+  if (d.step === 3) return dev ? b(A('تم التنفيذ والاختبار', 'Built & tested'), 'flask-conical', `App.devStep('${d.id}')`) : wait(A('قيد التنفيذ', 'In progress'));
+  if (d.step === 4) return sup ? b(A('اعتماد النشر ودفع الباقي', 'Accept & pay the rest'), 'rocket', `App.devStep('${d.id}')`) : wait(A('بانتظار اعتماد المشرف', 'Awaiting acceptance'));
+}
+C.devreq = () => {
+  const sup = R.role === 'supervisor', open = devreqs.filter(d => d.step < DSTEPS[d.type].length);
+  return hero(A('طلبات التطوير', 'Dev requests'), sup ? A('طلبات التطوير والإصلاح', 'Feature & fix requests') : A('حساب المطوّر', 'Developer account'),
+    A('أي ميزة جديدة أو إصلاح يُطلب من هنا: يفتح المشرف الطلب، يرسل المطوّر السعر والمدة، ثم الموافقة والتنفيذ والنشر. الإصلاحات خلال فترة الضمان مجانية.', 'Any new feature or fix is requested here: the supervisor opens it, the developer sends price and time, then approval, build and release. Fixes during the warranty are free.'),
+    sup ? `<button class="btn" onclick="App.devNew()">${ic('plus')}${A('طلب تطوير جديد', 'New dev request')}</button>` : '') +
+  `<div class="grid g4 section">${stat('inbox', A('مفتوحة', 'Open'), open.length, '')}${stat('calculator', A('بانتظار التقدير', 'Awaiting estimate'), devreqs.filter(d => d.type === 'feature' && d.step === 1).length, '')}${stat('wrench', A('إصلاحات (مجانية)', 'Fixes (free)'), devreqs.filter(d => d.type === 'bug').length, A('ضمن الضمان', 'under warranty'))}${stat('circle-check-big', A('مكتملة', 'Done'), devreqs.length - open.length, '')}</div>
+  ${devreqs.map(d => `<div class="card section"><div style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap"><div class="ic">${ic(d.type === 'bug' ? 'bug' : 'sparkles')}</div>
+    <div style="flex:1;min-width:220px"><div class="small muted">#${d.id} · ${fmtD(d.at)} ${fmtT(d.at)}</div><h2 style="font-size:18px">${esc(d.title)}</h2><div class="muted small">${esc(d.desc)}</div>
+      <div class="chips" style="margin-top:8px">${d.type === 'bug' ? `<span class="badge bad">${A('إصلاح خلل', 'Bug fix')}</span><span class="badge ok">${A('مجاني ضمن الضمان', 'Free · warranty')}</span>` : `<span class="badge">${A('ميزة جديدة', 'New feature')}</span>`}${prB(d.p)}${d.price ? `<span class="badge mute">${money(d.price)} · ${d.days} ${A('أيام', 'days')}</span>` : ''}</div></div>
+    <div>${devAction(d)}</div></div>
+    <div class="journey">${DSTEPS[d.type].map((s, i) => `<div class="${i < d.step ? 'done' : ''} ${i === d.step - 1 && d.step < DSTEPS[d.type].length ? 'cur' : ''}">${P(s)}</div>`).join('')}</div></div>`).join('')}`;
 };
 let qTab = 'ratings';
 C.quality = () => {
@@ -839,7 +872,7 @@ window.App = {
   otpOk() { session = 'customer'; store.set('session', session); const to = App._after || 'app/customer/home'; App._after = null; closeAll(); toast(A('تم تسجيل الدخول', 'Signed in'), 'badge-check'); go(to); },
   staffLogin() {
     modal(mHead(A('دخول الموظفين', 'Staff sign in')) + `<label class="field" style="margin-top:10px">${A('البريد الوظيفي', 'Work email')}<input class="input" dir="ltr" value="ahmed@arsolvia.sa"></label><label class="field" style="margin-top:10px">${A('كلمة المرور', 'Password')}<input class="input" type="password" value="demo1234"></label>
-      <div class="grid g2" style="margin-top:14px"><button class="btn" onclick="App.as('employee')">${ic('headset')}${A('دخول كموظف', 'As employee')}</button><button class="btn ghost" onclick="App.as('supervisor')">${ic('shield-check')}${A('دخول كمشرف', 'As supervisor')}</button></div>`);
+      <div class="grid g2" style="margin-top:14px"><button class="btn" onclick="App.as('employee')">${ic('headset')}${A('دخول كموظف', 'As employee')}</button><button class="btn ghost" onclick="App.as('supervisor')">${ic('shield-check')}${A('دخول كمشرف', 'As supervisor')}</button></div><button class="btn ghost block" style="margin-top:10px" onclick="App.as('developer')">${ic('code-xml')}${A('دخول كمطوّر', 'As developer')}</button>`);
   },
   as(r) { if (r.startsWith('customer')) { ctype = r.split(':')[1] || ctype; store.set('ctype', ctype); r = 'customer'; } session = r; store.set('session', r); closeAll(); const to = `app/${r}/${menuOf(r)[0][0]}`; if (location.hash === '#' + to) route(); else go(to); },
   logout() { session = null; store.set('session', null); toast(A('تم تسجيل الخروج', 'Signed out'), 'log-out'); go(''); },
@@ -921,6 +954,26 @@ window.App = {
   },
   cmpSt(id, st) { complaints.find(c => c.id === id).st = st; save(); toast(A('تم تحديث حالة الشكوى', 'Complaint updated')); },
   qTab(k) { qTab = k; render(); },
+  devNew() {
+    modal(mHead(A('طلب تطوير جديد', 'New dev request'), A('يصل للمطوّر مباشرة', 'Goes straight to the developer')) + `<div class="grid" style="gap:12px;margin-top:10px">
+      <label class="field">${A('النوع', 'Type')}<select class="input" id="dType"><option value="feature">${A('ميزة جديدة / تعديل', 'New feature / change')}</option><option value="bug">${A('إصلاح خلل', 'Bug fix')}</option></select></label>
+      <label class="field">${A('العنوان', 'Title')}<input class="input" id="dTitle"></label>
+      <label class="field">${A('التفاصيل', 'Details')}<textarea class="input" id="dDesc" rows="3"></textarea></label>
+      <label class="field">${A('الأولوية', 'Priority')}<select class="input" id="dP">${Object.keys(PR).map(k => `<option value="${k}" ${k === 'normal' ? 'selected' : ''}>${A(PR[k][0], PR[k][1])}</option>`).join('')}</select></label>
+      <button class="btn" onclick="App.devSave()">${ic('send')}${A('إرسال للمطوّر', 'Send to developer')}</button></div>`);
+  },
+  devSave() {
+    const title = $('#dTitle').value.trim(); if (!title) return toast(A('أدخل العنوان', 'Enter a title'), 'circle-alert');
+    const n = 101 + devreqs.length;
+    devreqs.unshift({ id: 'DEV-' + n, type: $('#dType').value, title, desc: $('#dDesc').value, p: $('#dP').value, step: 1, price: 0, days: 0, at: Date.now() });
+    save(); closeAll(); render(); toast(A('تم إرسال الطلب للمطوّر', 'Sent to the developer'), 'send');
+  },
+  devEstimate(id) {
+    modal(mHead(A('إرسال التقدير', 'Send estimate')) + `<div class="grid g2" style="margin-top:10px"><label class="field">${A('السعر (ر.س)', 'Price (SAR)')}<input class="input" type="number" id="eP" value="1500"></label><label class="field">${A('المدة (أيام)', 'Days')}<input class="input" type="number" id="eD" value="3"></label></div>
+      <button class="btn block" style="margin-top:14px" onclick="App.devEstSave('${id}')">${ic('send')}${A('إرسال للمشرف', 'Send to supervisor')}</button>`);
+  },
+  devEstSave(id) { const d = devreqs.find(x => x.id === id); d.price = +$('#eP').value; d.days = +$('#eD').value; d.step = 2; save(); closeAll(); render(); toast(A('تم إرسال التقدير للمشرف', 'Estimate sent'), 'send'); },
+  devStep(id) { const d = devreqs.find(x => x.id === id); d.step++; save(); render(); toast(P(DSTEPS[d.type][d.step - 1]), 'check'); },
   srE(id) { srEmp = srEmp === id ? null : id; render(); },
   srP(k) { srPeriod = k; render(); },
   // --- supervisor ---
@@ -934,7 +987,7 @@ window.App = {
       <div class="grid g2"><label class="field">${A('الاسم بالعربي', 'Name (Arabic)')}<input class="input" id="sAr" value="${esc(s.ar)}" placeholder="قوى — نقل الخدمات"></label><label class="field">${A('الاسم بالإنجليزي', 'Name (English)')}<input class="input" id="sEn" dir="ltr" value="${esc(s.en)}" placeholder="Qiwa — Transfers"></label></div>
       <label class="field">${A('الوصف', 'Description')}<input class="input" id="sD" value="${esc(A(s.dar, s.den))}"></label>
       <label class="field">${A('الجهة / المنصة', 'Platform')}<select class="input" id="sPl"><option value="">${BRAND} (${A('خدمة أعمال', 'business service')})</option>${platforms.map(p => `<option value="${p.id}" ${p.id === s.pl ? 'selected' : ''}>${nm(p)}</option>`).join('')}</select></label>
-      <div class="grid g2"><label class="field">${A('السعر (ر.س)', 'Price (SAR)')}<input class="input" type="number" id="sP" value="${s.price}"></label><label class="field">${A('المدة (أيام عمل)', 'Business days')}<input class="input" type="number" id="sS" value="${s.days}"></label></div>
+      <div class="grid g2"><label class="field">${A('السعر (ر.س)', 'Price (SAR)')}<input class="input" type="number" id="sP" value="${s.price}"></label><label class="field">${A('المدة (أيام)', 'Days')}<input class="input" type="number" id="sS" value="${s.days}"></label></div>
       <button class="btn" onclick="App.saveService('${id || ''}')">${ic('check')}${A('حفظ ونشر', 'Save & publish')}</button></div>`);
   },
   logoIn(input) { readImage(input, d => { App._logo = d; $('#logoPrev').innerHTML = `<div class="plogo lg"><img src="${d}"></div>`; }); },
